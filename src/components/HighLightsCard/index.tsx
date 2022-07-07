@@ -6,25 +6,42 @@ import {
     Icon,
     AmmountContent,
     Ammount,
-    LastAmmount,
+    LastTransaction,
 } from "./styles"
 
-export const HighLightsCard = () => {
+interface Props {
+    type: 'up' | 'down' | 'dollar';
+    title: string;
+    ammount: string;
+    lastTransaction: string;
+}
+const ICON = {
+    up: "arrow-up-circle",
+    down: "arrow-down-circle",
+    dollar: "dollar-sign",
+}
+
+export const HighLightsCard = ({
+    type,
+    title,
+    ammount,
+    lastTransaction
+}: Props) => {
 
     return (
-    <Container>
+    <Container type={type}>
         <CardTitleContent>
-            <Title>Entradas</Title>
-            <Icon name="arrow-up-circle" />
+            <Title type={type}>{title}</Title>
+            <Icon type={type} name={ICON[type]} />
         </CardTitleContent>
 
         <AmmountContent>
-            <Ammount>
-                R$ 17.400,00
+            <Ammount type={type}>
+                {ammount}
             </Ammount>
-            <LastAmmount>
-                Última entrada dia 13 de abril
-            </LastAmmount>
+            <LastTransaction type={type}>
+                {lastTransaction}
+            </LastTransaction>
         </AmmountContent>
     </Container>
 )}

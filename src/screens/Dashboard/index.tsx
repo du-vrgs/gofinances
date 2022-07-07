@@ -32,9 +32,25 @@ export const Dashboard = () => {
         </Header>
 
         <ScrollHightLightCards>
-          <HighLightsCard />
-          <HighLightsCard />
-          <HighLightsCard />
+          <HighLightsCard 
+            type='up'
+            title={"Entradas"} 
+            ammount={"R$ 17.400,00"} 
+            lastTransaction={"Última entrada dia 13 de abril"}
+          />
+          <HighLightsCard 
+            type='down'
+            title={"Saídas"} 
+            ammount={"R$ 7.400,00"} 
+            lastTransaction={"Última saída dia 03 de abril"}
+          />
+
+          <HighLightsCard 
+            type='dollar'
+            title={"Total"} 
+            ammount={"R$ 10.000,00"} 
+            lastTransaction={"01 á 16 de abril"}
+          />
         </ScrollHightLightCards>
       </Container>
   )
