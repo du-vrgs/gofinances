@@ -50,7 +50,7 @@ export const Icon = styled(Feather)`
     font-size: 24px;
 `
 
-export const ScrollHightLightCards = styled.ScrollView.attrs({
+export const ScrollHorizontalHightLightCards = styled.ScrollView.attrs({
     horizontal: true,
     showsHorizontalScrollIndicator: false,
     contentContainerStyle: { paddingHorizontal: 24 }
@@ -58,4 +58,20 @@ export const ScrollHightLightCards = styled.ScrollView.attrs({
     width: 100%;
     position: absolute;
     margin-top: ${RFPercentage(24)}px;
+`
+
+export const ScrollVerticalTransactionsCards = styled.FlatList.attrs({
+    showsVerticalScrollIndicator: false,
+    contentContainerStyle: { paddingHorizontal: 24 }
+})`
+    flex: .75;
+`
+export const Title = styled.Text`
+    font-size: ${RFValue(18)}px;
+    font-family: ${({theme}) => theme.fonts.regular};
+    color: ${({theme}) => theme.colors.text_dark};
+    margin-bottom: 18px;
+    margin-top: ${RFPercentage(12)}px;
+    padding-left: 24;
+
 `

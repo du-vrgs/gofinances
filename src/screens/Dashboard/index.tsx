@@ -1,5 +1,6 @@
 import React from "react"
 import { HighLightsCard } from "../../components/HighLightsCard"
+import { Props, TransactionCard } from "../../components/TransactionCard"
 
 import { 
   DashboardContainer as Container, 
@@ -11,10 +12,36 @@ import {
   UserName,
   Icon,
   HeaderWrapper,
-  ScrollHightLightCards
+  ScrollHorizontalHightLightCards,
+  ScrollVerticalTransactionsCards,
+  Title,
 } from "./styles"
 
 export const Dashboard = () => {
+
+  const mockedList = [
+    {
+      type: 'positive',
+      title: "Desenvolvimento de site",
+      ammount: "RS 12.000,00",
+      category: { name: 'Vendas', icon: 'dollar-sign'},
+      date: "14/04/2020"
+    },
+    {
+      type: 'negative',
+      title: "Desenvolvimento de site",
+      ammount: "RS 12.000,00",
+      category: { name: 'Vendas', icon: 'dollar-sign'},
+      date: "14/04/2020"
+    },
+    {
+      type: 'positive',
+      title: "Desenvolvimento de site",
+      ammount: "RS 12.000,00",
+      category: { name: 'Vendas', icon: 'dollar-sign'},
+      date: "14/04/2020"
+    },
+  ]
 
   return (
       <Container>
@@ -31,7 +58,7 @@ export const Dashboard = () => {
             </HeaderWrapper>
         </Header>
 
-        <ScrollHightLightCards>
+        <ScrollHorizontalHightLightCards>
           <HighLightsCard 
             type='up'
             title={"Entradas"} 
@@ -51,7 +78,13 @@ export const Dashboard = () => {
             ammount={"R$ 10.000,00"} 
             lastTransaction={"01 á 16 de abril"}
           />
-        </ScrollHightLightCards>
+        </ScrollHorizontalHightLightCards>
+
+        <Title>Listagem</Title>
+        <ScrollVerticalTransactionsCards
+          data={mockedList}
+          renderItem={ ({ item }) => <TransactionCard data={item} />}
+        />
       </Container>
   )
 } 
