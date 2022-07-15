@@ -1,6 +1,8 @@
+import { DataListProps } from './index';
 import styled from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Feather } from "@expo/vector-icons";
+import { FlatList, FlatListProps } from "react-native";
 
 export const DashboardContainer = styled.View`
     flex: 1;
@@ -60,7 +62,9 @@ export const ScrollHorizontalHightLightCards = styled.ScrollView.attrs({
     margin-top: ${RFPercentage(24)}px;
 `
 
-export const ScrollVerticalTransactionsCards = styled.FlatList.attrs({
+export const ScrollVerticalTransactionsCards = styled(
+    FlatList as new (props: FlatListProps<DataListProps>) => FlatList<DataListProps>)
+    .attrs({
     showsVerticalScrollIndicator: false,
     contentContainerStyle: { paddingHorizontal: 24 }
 })`

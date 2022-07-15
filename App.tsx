@@ -12,6 +12,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 
 import { Dashboard } from './src/screens/Dashboard'; 
+import { Register } from './src/screens/Register';
 
 export default function App() {
 
@@ -49,7 +50,8 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <View onLayout={onLayoutRootView} style={{flex: 1}}>
-        <Dashboard />
+        {/* <Dashboard /> */}
+        <Register />
       </View>
     </ThemeProvider>
   );

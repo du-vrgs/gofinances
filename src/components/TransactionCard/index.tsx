@@ -15,7 +15,7 @@ interface Category {
     icon: string;
 }
 
-interface Data {
+export interface TransactionCardProps {
     type: 'positive' | 'negative';
     title: string;
     ammount: string;
@@ -23,7 +23,7 @@ interface Data {
     date: string;
 }
 interface Props {
-    data: Data;
+    data: TransactionCardProps;
 }
 
 export const TransactionCard = ({data}: Props): ReactElement => {

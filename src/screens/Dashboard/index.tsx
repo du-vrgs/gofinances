@@ -1,6 +1,6 @@
 import React from "react"
 import { HighLightsCard } from "../../components/HighLightsCard"
-import { Props, TransactionCard } from "../../components/TransactionCard"
+import { Props, TransactionCard, TransactionCardProps } from "../../components/TransactionCard"
 
 import { 
   DashboardContainer as Container, 
@@ -17,10 +17,15 @@ import {
   Title,
 } from "./styles"
 
+export interface DataListProps extends TransactionCardProps {
+  id: string;
+}
+
 export const Dashboard = () => {
 
-  const mockedList = [
+  const mockedList: DataListProps[] = [
     {
+      id: '1',
       type: 'positive',
       title: "Desenvolvimento de site",
       ammount: "RS 12.000,00",
@@ -28,6 +33,7 @@ export const Dashboard = () => {
       date: "14/04/2020"
     },
     {
+      id: '2',
       type: 'negative',
       title: "Desenvolvimento de site",
       ammount: "RS 12.000,00",
@@ -35,6 +41,7 @@ export const Dashboard = () => {
       date: "14/04/2020"
     },
     {
+      id: '3',
       type: 'positive',
       title: "Desenvolvimento de site",
       ammount: "RS 12.000,00",
@@ -83,7 +90,8 @@ export const Dashboard = () => {
         <Title>Listagem</Title>
         <ScrollVerticalTransactionsCards
           data={mockedList}
-          renderItem={ ({ item }) => <TransactionCard data={item} />}
+          keyExtractor={ item => item.id}
+          renderItem={ ({ item }) => <TransactionCard data={item} />} 
         />
       </Container>
   )
