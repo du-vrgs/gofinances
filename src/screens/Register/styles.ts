@@ -24,3 +24,20 @@ export const Title = styled.Text`
     font-size: ${RFValue(18)}px;
 
 `
+
+export const Form = styled.View`
+    flex: 1;
+    width: 100%;
+    padding: 24px;
+
+    justify-content: space-between;
+`
+
+export const Fields = styled.View``
+
+export const TransactionTypeButtonsWrraper = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 100%;
+    margin-top: 18px;
+`;
