@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ReactElement } from "react";
 import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
+import { Select } from '../../components/Form/Select';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 import { 
     RegisterContainer as Container,
@@ -42,6 +43,7 @@ export const Register = ():ReactElement => {
                     <Input 
                         placeholder='Preço'
                     />
+
                     <TransactionTypeButtonsWrraper>
                         <TransactionTypeButton
                             isActive={transactionType === TransactionType.up}
@@ -56,6 +58,8 @@ export const Register = ():ReactElement => {
                             onPress={() => handleSelectTransactionType(TransactionType.down)}
                         />
                     </TransactionTypeButtonsWrraper>
+
+                    <Select category='Categoria'/>
                 </Fields>
 
                 <Button title='Enviar'/>

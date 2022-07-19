@@ -39,5 +39,5 @@ export const TransactionTypeButtonsWrraper = styled.View`
     flex-direction: row;
     justify-content: space-between;
     max-width: 100%;
-    margin-top: 18px;
+    margin: 18px 0px;
 `;
