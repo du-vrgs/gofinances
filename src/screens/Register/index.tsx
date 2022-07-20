@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { ReactElement } from "react";
+import { Modal } from 'react-native';
 import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
 import { Select } from '../../components/Form/Select';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
+import { CategorySelect } from '../CategorySelect';
 import { 
     RegisterContainer as Container,
     Header,
@@ -21,11 +23,24 @@ enum TransactionType {
 
 export const Register = ():ReactElement => {
 
+    const [selectCategoryOpen, setSelectCategoryOpen] = useState(false);
+    const [category, setCategory] = useState({
+        key: 'category',
+        name: 'Categoria'
+    });
+
     const [transactionType, setTransactionType] = useState(TransactionType.noSelect)
 
     const handleSelectTransactionType = (type: TransactionType) => {
         return setTransactionType(type)
     }
+
+    const handleOpenSelectCategory = () => setSelectCategoryOpen(true);
+    const handleCloseSelectCategory = () => setSelectCategoryOpen(false);
+    const handleSelectCategory = (name: string) => setCategory({
+        name: name,
+        key: name
+    })
 
     return (
         <Container>
@@ -59,11 +74,19 @@ export const Register = ():ReactElement => {
                         />
                     </TransactionTypeButtonsWrraper>
 
-                    <Select category='Categoria'/>
+                    <Select category={category.name} onPress={() => handleOpenSelectCategory()}/>
                 </Fields>
 
                 <Button title='Enviar'/>
             </Form>
+
+            <Modal visible={selectCategoryOpen}>
+                <CategorySelect 
+                    category={category}
+                    setCategory={handleSelectCategory}
+                    closeSelectCategory={handleCloseSelectCategory}
+                />
+            </Modal>
 
         </Container>
     )

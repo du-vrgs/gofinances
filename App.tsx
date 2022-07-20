@@ -13,6 +13,7 @@ import * as Font from 'expo-font';
 
 import { Dashboard } from './src/screens/Dashboard'; 
 import { Register } from './src/screens/Register';
+import { CategorySelect } from './src/screens/CategorySelect';
 
 export default function App() {
 

@@ -1,6 +1,6 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import { TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 
 export const ButtonContainer = styled(TouchableOpacity)`
     width: 100%;
@@ -9,6 +9,10 @@ export const ButtonContainer = styled(TouchableOpacity)`
     padding: 18px;
     border-radius: 4px;
     align-items: center;
+
+    ${({ disabled }) => disabled && css`
+        background-color: ${({theme}) => theme.colors.secondary_light};
+    `}
 `
 
 export const Title = styled.Text`
