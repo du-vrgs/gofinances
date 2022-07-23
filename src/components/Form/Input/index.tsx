@@ -2,11 +2,16 @@ import React, { ReactElement } from "react";
 import { TextInputProps } from "react-native";
 import { InputContainer } from "./style";
 
-type Props = TextInputProps;
+// type Props = TextInputProps;
 
-export const Input = ({...rest}: Props):ReactElement => {
+interface Props extends TextInputProps {
+    borderError: boolean;
+}
+
+
+export const Input = ({borderError, ...rest}: Props):ReactElement => {
 
     return (
-        <InputContainer {...rest}/>
+        <InputContainer borderError={borderError} {...rest}/>
     )
 }
