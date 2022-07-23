@@ -37,6 +37,7 @@ const schema = yup.object().shape({
     .number()
     .typeError('O valor deve ser numérico')
     .positive('Valor não pode ser negativo')
+    .required('Preço é obrigatório')
 })
 
 export const Register = ():ReactElement => {
@@ -44,6 +45,7 @@ export const Register = ():ReactElement => {
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
+    const isValidInputs = Object.values(errors).length === 0
 
     const [selectCategoryOpen, setSelectCategoryOpen] = useState(false);
     const [category, setCategory] = useState({
@@ -128,6 +130,7 @@ export const Register = ():ReactElement => {
                     <Button 
                         title='Enviar' 
                         onPress={handleSubmit(handleRegister)}
+                        disabled={!isValidInputs}
                     />
                 </Form>
 
