@@ -130,7 +130,7 @@ export const Register = ():ReactElement => {
                     <Button 
                         title='Enviar' 
                         onPress={handleSubmit(handleRegister)}
-                        disabled={!isValidInputs}
+                        enabled={!isValidInputs}
                     />
                 </Form>
 

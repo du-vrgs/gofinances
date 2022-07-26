@@ -1,19 +1,21 @@
 import React, { ReactElement } from "react";
-import { TouchableOpacityProps } from "react-native";
+import { RectButtonProps, GestureHandlerRootView } from "react-native-gesture-handler";
 import { Category, Icon, SelectContainer } from "./styles";
 
-interface Props extends TouchableOpacityProps {
+interface Props extends RectButtonProps {
     category: string;
 }
 
 export const Select = ({category, ...rest}: Props): ReactElement => {
 
     return (
-        <SelectContainer {...rest} activeOpacity={0.7}>
-            <Category>
-                {category}
-            </Category>
-            <Icon name='chevron-down'/>
-        </SelectContainer>
+        <GestureHandlerRootView>
+            <SelectContainer {...rest}>
+                <Category>
+                    {category}
+                </Category>
+                <Icon name='chevron-down'/>
+            </SelectContainer>
+        </GestureHandlerRootView>
     )
 }

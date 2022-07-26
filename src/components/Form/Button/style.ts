@@ -1,8 +1,13 @@
+import { PropsWithChildren } from "react";
+import { RectButton, RectButtonProps } from "react-native-gesture-handler";
 import { RFValue } from 'react-native-responsive-fontsize';
-import { TouchableOpacity } from "react-native";
 import styled, { css } from "styled-components/native";
 
-export const ButtonContainer = styled(TouchableOpacity)`
+interface Props extends PropsWithChildren<RectButtonProps> {
+    
+}
+
+export const ButtonContainer = styled(RectButton)<Props>`
     width: 100%;
     background-color: ${({theme}) => theme.colors.secondary};
 
@@ -10,7 +15,7 @@ export const ButtonContainer = styled(TouchableOpacity)`
     border-radius: 4px;
     align-items: center;
 
-    ${({ disabled }) => disabled && css`
+    ${({ enabled }) => enabled && css`
         background-color: ${({theme}) => theme.colors.secondary_light};
     `}
 `
