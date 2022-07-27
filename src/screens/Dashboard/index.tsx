@@ -33,7 +33,7 @@ export const Dashboard = () => {
 
       if (allTransactions.length) {
         const formatedTransactions: DataListProps[] = allTransactions.map((transaction: DataListProps) => {
-          const formatedAmount = Number(transaction.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
+          const formatedAmount = parseFloat(transaction.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
           const formatedDate = new Date(transaction.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'numeric', year: '2-digit'})
 
           return {
