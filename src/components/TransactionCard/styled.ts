@@ -1,9 +1,9 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
-import styled, { css } from "styled-components/native";
+import styled from "styled-components/native";
 
 export type CardType = {
-    type: 'positive' | 'negative';
+    type: 'Income' | 'Outcome';
  }
 
 export const TransactionCardContainer = styled.View`
@@ -27,7 +27,7 @@ export const Ammount = styled.Text<CardType>`
     font-family: ${({theme}) => theme.fonts.regular};
     margin-bottom: 18px;
 
-    color: ${({theme, type}) => theme.colors[type === 'positive' ? 'success' : 'attention']};
+    color: ${({theme, type}) => theme.colors[type === 'Income' ? 'success' : 'attention']};
 `
 export const Footer = styled.View`
     flex-direction: row;

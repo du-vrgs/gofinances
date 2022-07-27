@@ -1,8 +1,10 @@
-import React, { useState, ReactElement} from 'react'
+import React, { useState, ReactElement, useEffect} from 'react'
 import { Modal, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from "react-native-uuid"
 
 import { Button } from '../../components/Form/Button';
 import { Select } from '../../components/Form/Select';
@@ -17,6 +19,7 @@ import {
     Fields,
     TransactionTypeButtonsWrraper
 } from "./styles";
+import { useNavigation } from '@react-navigation/native';
 
 enum TransactionType {
     up = 'Income',
@@ -27,6 +30,9 @@ enum TransactionType {
 interface FormData {
     name: string;
     amount: string;
+}
+interface NavigationProps {
+    navigate: (name: string) => void;
 }
 
 const schema = yup.object().shape({
@@ -42,47 +48,90 @@ const schema = yup.object().shape({
 
 export const Register = ():ReactElement => {
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const transactionKey = "@gofinances:transaction";
+    const { control, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(schema)
     });
-    const isValidInputs = Object.values(errors).length === 0
+    const isValidInputs = Object.values(errors).length === 0;
+
+    const navigation = useNavigation<NavigationProps>();
 
     const [selectCategoryOpen, setSelectCategoryOpen] = useState(false);
     const [category, setCategory] = useState({
         key: 'category',
         name: 'Categoria'
     });
-    const [transactionType, setTransactionType] = useState(TransactionType.noSelect)
+    const [transactionType, setTransactionType] = useState(TransactionType.noSelect);
 
     const handleSelectTransactionType = (type: TransactionType) => {
         return setTransactionType(type)
-    }
+    };
     const handleOpenSelectCategory = () => setSelectCategoryOpen(true);
     const handleCloseSelectCategory = () => setSelectCategoryOpen(false);
     const handleSelectCategory = (name: string) => setCategory({
         name: name,
         key: name
-    })
+    });
 
-    const handleRegister = (form: FormData) => {
+    const resetFields = () => {
+        setCategory({
+            key: 'category',
+            name: 'Categoria'
+        })
+        setTransactionType(TransactionType.noSelect);
+        reset();
+    }
+
+    const handleRegister = async (form: FormData) => {
 
         const noTransactionTypeSelected = !transactionType;
-        const noCategorySelected = category.key === 'category'
+        const noCategorySelected = category.key === 'category';
 
         if (noTransactionTypeSelected) {
-            return Alert.alert('Selecione um tipo de transação')
+            return Alert.alert('Selecione um tipo de transação');
         }
         if (noCategorySelected) {
-            return Alert.alert('Selecione uma categoria')
+            return Alert.alert('Selecione uma categoria');
         }
 
-        console.log({
-            name: form.name,
-            amount: form.amount,
-            transactionType: transactionType,
-            category: category.key
-        })
+        try {
+            const formData = {
+                id: String(uuid.v4()),
+                date: new Date(),
+                name: form.name,
+                amount: form.amount,
+                type: transactionType,
+                category: category.key
+            };
+
+            const storageTransactions = await AsyncStorage.getItem(transactionKey);
+            const allTransactions = storageTransactions ? JSON.parse(storageTransactions) : [];
+            const newTransactions = [...allTransactions, formData];
+    
+            await AsyncStorage.setItem(transactionKey, JSON.stringify(newTransactions)).then(() => {
+                Alert.alert('Save successfully');
+                resetFields();
+                navigation.navigate('Listagem');
+            })
+        }
+        catch (error: any) {
+            Alert.alert('Erro ao salvar, tente novamente');
+            console.log('[Register][handleSubmit][error]', error);
+        }
+ 
     }
+
+    // useEffect(() => {
+    //     // const loadStorage = async () => {
+    //     //     const storage = await AsyncStorage.getItem(transactionKey);
+    //     //     console.log(JSON.parse(storage!));
+    //     // };
+
+    //     // loadStorage();
+
+    //     // const removeStorage = async () => await AsyncStorage.removeItem(transactionKey);
+    //     // removeStorage();
+    // }, [])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
@@ -130,7 +179,7 @@ export const Register = ():ReactElement => {
                     <Button 
                         title='Enviar' 
                         onPress={handleSubmit(handleRegister)}
-                        enabled={!isValidInputs}
+                        // enabled={!isValidInputs}
                     />
                 </Form>
 

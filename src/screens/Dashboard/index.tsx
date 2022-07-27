@@ -1,4 +1,5 @@
-import React from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useCallback, useEffect, useState } from "react"
 import { HighLightsCard } from "../../components/HighLightsCard"
 import { Props, TransactionCard, TransactionCardProps } from "../../components/TransactionCard"
 
@@ -23,32 +24,38 @@ export interface DataListProps extends TransactionCardProps {
 
 export const Dashboard = () => {
 
-  const mockedList: DataListProps[] = [
-    {
-      id: '1',
-      type: 'positive',
-      title: "Desenvolvimento de site",
-      ammount: "RS 12.000,00",
-      category: { name: 'Vendas', icon: 'dollar-sign'},
-      date: "14/04/2020"
-    },
-    {
-      id: '2',
-      type: 'negative',
-      title: "Desenvolvimento de site",
-      ammount: "RS 12.000,00",
-      category: { name: 'Vendas', icon: 'dollar-sign'},
-      date: "14/04/2020"
-    },
-    {
-      id: '3',
-      type: 'positive',
-      title: "Desenvolvimento de site",
-      ammount: "RS 12.000,00",
-      category: { name: 'Vendas', icon: 'dollar-sign'},
-      date: "14/04/2020"
-    },
-  ]
+  const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
+
+  const getTransactions = useCallback( async () => {
+      const transactionKey = "@gofinances:transaction";
+      const storageTransactions = await AsyncStorage.getItem(transactionKey);
+      const allTransactions = storageTransactions ? JSON.parse(storageTransactions) : [];
+
+      if (allTransactions.length) {
+        const formatedTransactions: DataListProps[] = allTransactions.map((transaction: DataListProps) => {
+          const formatedAmount = Number(transaction.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
+          const formatedDate = new Date(transaction.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'numeric', year: '2-digit'})
+
+          return {
+            id: transaction.id,
+            name: transaction.name,
+            type: transaction.type,
+            category: transaction.category,
+            amount: formatedAmount,
+            date: formatedDate
+          }
+        })
+
+        setTransactionsList(formatedTransactions)
+      }
+
+  }, [])
+
+  useEffect(() => {
+    getTransactions()
+  }, [getTransactions])
+
+  console.log(transactionsList)
 
   return (
       <Container>
@@ -89,7 +96,7 @@ export const Dashboard = () => {
 
         <Title>Listagem</Title>
         <ScrollVerticalTransactionsCards
-          data={mockedList}
+          data={transactionsList}
           keyExtractor={ item => item.id}
           renderItem={ ({ item }) => <TransactionCard data={item} />} 
         />
