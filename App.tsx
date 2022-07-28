@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { ThemeProvider } from 'styled-components';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
 
 import {
   Poppins_400Regular,

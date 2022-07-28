@@ -24,7 +24,7 @@ interface Props {
 
 export const TransactionCard = ({data}: Props): ReactElement => {
 
-    const categoryIcon = categories.filter((category) => category.name === data.category)[0].icon
+    const [ category ] = categories.filter((category) => category.name === data.category)
 
     return (
         <Container>
@@ -36,7 +36,7 @@ export const TransactionCard = ({data}: Props): ReactElement => {
 
             <Footer>
                 <Category>
-                    <Icon name={categoryIcon}/>
+                    <Icon name={category.icon}/>
                     <CategoryName>
                         {data.category}
                     </CategoryName>

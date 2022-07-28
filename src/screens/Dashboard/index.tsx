@@ -1,7 +1,7 @@
+import React, { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useCallback, useEffect, useState } from "react"
-import { HighLightsCard } from "../../components/HighLightsCard"
-import { Props, TransactionCard, TransactionCardProps } from "../../components/TransactionCard"
+import { HighLightsCard } from "../../components/HighLightsCard";
+import { TransactionCard, TransactionCardProps } from "../../components/TransactionCard";
 
 import { 
   DashboardContainer as Container, 
@@ -17,6 +17,7 @@ import {
   ScrollVerticalTransactionsCards,
   Title,
 } from "./styles"
+import { useFocusEffect } from "@react-navigation/native";
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
@@ -26,7 +27,7 @@ export const Dashboard = () => {
 
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
 
-  const getTransactions = useCallback( async () => {
+  const getTransactions = async () => {
       const transactionKey = "@gofinances:transaction";
       const storageTransactions = await AsyncStorage.getItem(transactionKey);
       const allTransactions = storageTransactions ? JSON.parse(storageTransactions) : [];
@@ -48,14 +49,11 @@ export const Dashboard = () => {
 
         setTransactionsList(formatedTransactions)
       }
+  }
 
-  }, [])
-
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     getTransactions()
-  }, [getTransactions])
-
-  console.log(transactionsList)
+  }, []))
 
   return (
       <Container>
