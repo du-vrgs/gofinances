@@ -68,7 +68,7 @@ export const ScrollVerticalTransactionsCards = styled(
     showsVerticalScrollIndicator: false,
     contentContainerStyle: { paddingHorizontal: 24 }
 })`
-    flex: .75;
+    flex: .95;
 `
 export const Title = styled.Text`
     font-size: ${RFValue(18)}px;

@@ -19,6 +19,12 @@ import {
 } from "./styles"
 import { useFocusEffect } from "@react-navigation/native";
 
+interface AmountProps {
+  income: string;
+  outcome: string;
+  total: string;
+}
+
 export interface DataListProps extends TransactionCardProps {
   id: string;
 }
@@ -26,6 +32,11 @@ export interface DataListProps extends TransactionCardProps {
 export const Dashboard = () => {
 
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
+  const [transactionsAmount, setTransactionsAmount] = useState<AmountProps>({
+    income: "R$ 0,00",
+    outcome: "R$ 0,00",
+    total: "R$ 0,00"
+  })
 
   const getTransactions = async () => {
       const transactionKey = "@gofinances:transaction";
@@ -33,7 +44,20 @@ export const Dashboard = () => {
       const allTransactions = storageTransactions ? JSON.parse(storageTransactions) : [];
 
       if (allTransactions.length) {
+
+        let income = 0;
+        let outcome = 0;
+        let total = 0;
+
         const formatedTransactions: DataListProps[] = allTransactions.map((transaction: DataListProps) => {
+
+          if (transaction.type === 'Income') {
+            income += Number(transaction.amount);
+          }
+          else {
+            outcome += Number(transaction.amount);
+          }
+
           const formatedAmount = parseFloat(transaction.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'});
           const formatedDate = new Date(transaction.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'numeric', year: '2-digit'})
 
@@ -47,6 +71,13 @@ export const Dashboard = () => {
           }
         })
 
+        total = income - outcome
+
+        setTransactionsAmount({
+          income: income.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
+          outcome: outcome.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
+          total: total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'})
+        })
         setTransactionsList(formatedTransactions)
       }
   }
@@ -74,30 +105,36 @@ export const Dashboard = () => {
           <HighLightsCard 
             type='up'
             title={"Entradas"} 
-            ammount={"R$ 17.400,00"} 
+            ammount={transactionsAmount.income} 
             lastTransaction={"Última entrada dia 13 de abril"}
           />
           <HighLightsCard 
             type='down'
             title={"Saídas"} 
-            ammount={"R$ 7.400,00"} 
+            ammount={transactionsAmount.outcome} 
             lastTransaction={"Última saída dia 03 de abril"}
           />
 
           <HighLightsCard 
             type='dollar'
             title={"Total"} 
-            ammount={"R$ 10.000,00"} 
+            ammount={transactionsAmount.total} 
             lastTransaction={"01 á 16 de abril"}
           />
         </ScrollHorizontalHightLightCards>
 
-        <Title>Listagem</Title>
-        <ScrollVerticalTransactionsCards
-          data={transactionsList}
-          keyExtractor={ item => item.id}
-          renderItem={ ({ item }) => <TransactionCard data={item} />} 
-        />
+        {transactionsList.length > 0 ?
+        <>
+          <Title>Listagem</Title>
+          <ScrollVerticalTransactionsCards
+            data={transactionsList}
+            keyExtractor={ item => item.id}
+            renderItem={ ({ item }) => <TransactionCard data={item} />} 
+          />
+        </>
+        :
+          <Title>Lista de transações vazia</Title>
+        }
       </Container>
   )
 } 
