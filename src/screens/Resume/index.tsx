@@ -2,6 +2,7 @@ import React, { ReactElement, useCallback, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 
+import { VictoryPie } from "victory-native"
 import { HistoryCard } from "../../components/HistoryCard";
 import { Loading } from "../../components/Loading";
 import { categories } from "../../utils/categories";
@@ -9,8 +10,11 @@ import {
     ResumeContainer, 
     Header, 
     Title, 
-    HistoryCardsContent 
+    HistoryCardsContent, 
+    ChartContent
 } from "./styles";
+import { useTheme } from "styled-components";
+import { RFValue } from "react-native-responsive-fontsize";
 
 interface AllResumeProps {
     type: 'Income' | 'Outcome';
@@ -22,12 +26,15 @@ interface AllResumeProps {
 
 interface ResumeProps {
     name: string;
-    total: string;
+    formattedTotal: string;
+    total: number;
+    totalPercent: string;
     color: string;
 }
 
 export const Resume = (): ReactElement => {
 
+    const theme = useTheme();
     const [loading, setLoading] = useState(true);
     const [resumes, setResumes] = useState<ResumeProps[]>([]);
 
@@ -35,22 +42,31 @@ export const Resume = (): ReactElement => {
         const transactionKey = "@gofinances:transaction";
         const storageResumes = await AsyncStorage.getItem(transactionKey);
         const allResumes: AllResumeProps[] = storageResumes ? JSON.parse(storageResumes) : [];
+        const outcomeResumes = allResumes.filter(resume => resume.type === 'Outcome')
 
-        if (allResumes.length) {
+        if (outcomeResumes.length) {
+
+            const resumeTotal = outcomeResumes.reduce((acc, resume) => {
+                return acc + Number(resume.amount)
+            }, 0)
+
             const resumesList = categories.map((category) => {
                 let amount = 0
 
-                allResumes.forEach(resume => {
+                outcomeResumes.forEach(resume => {
                     if (resume.category === category.name) {
                         amount += Number(resume.amount)
                     }
                 })
 
                 if (amount > 0) {
-                    const total = amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL"})
+                    const formattedTotal = amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL"})
+                    const total = amount / resumeTotal * 100
                     return {
                         name: category.name,
+                        formattedTotal,
                         total: total,
+                        totalPercent: total.toFixed(0) + "%",
                         color: category.color
                     }
                 }
@@ -78,12 +94,32 @@ export const Resume = (): ReactElement => {
                     </Title>
                 </Header>
 
+                <ChartContent>
+                    <VictoryPie 
+                        data={resumes}
+                        x={`totalPercent`}
+                        y={'total'}
+                        colorScale={resumes.map((resume) => resume.color)}
+                        labelRadius={100}
+                        style={
+                            { 
+                                labels: { 
+                                    fill: theme.colors.shape, 
+                                    fontSize: `${RFValue(18)}px`, 
+                                    fontWeight: "bold" 
+                                }
+                            }
+                        }
+                        animate={{duration: 2100, easing: 'cubicIn'}}
+                    />
+                </ChartContent>
+
                 <HistoryCardsContent>
                     {resumes.map((resume, index) => (
                         <HistoryCard
                             key={index.toString()}
                             title={resume.name}
-                            amount={resume.total}
+                            amount={resume.formattedTotal}
                             color={resume.color}
                         />
                     ))}

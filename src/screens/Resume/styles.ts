@@ -21,6 +21,12 @@ export const Title = styled.Text`
     font-size: ${RFValue(18)}px;
 `
 
+
+export const ChartContent = styled.View`
+    width: 100%;
+    align-items: center;
+    padding: 24px;
+`;
 export const HistoryCardsContent = styled.View`
     padding: 24px;
 `;
