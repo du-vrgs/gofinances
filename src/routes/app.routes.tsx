@@ -2,10 +2,11 @@ import React from "react"
 import { Platform } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
+import theme from "../global/styles/theme"
 import { MaterialIcons } from "@expo/vector-icons"
 import { Dashboard } from "../screens/Dashboard"
 import { Register } from "../screens/Register"
-import theme from "../global/styles/theme"
+import { Resume } from "../screens/Resume"
 
 const { Navigator, Screen } = createBottomTabNavigator()
 
@@ -53,8 +54,8 @@ export const AppRoutes = () => {
       />
 
       <Screen 
-        name='Finances'
-        component={Register}
+        name='Resumo'
+        component={Resume}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons 

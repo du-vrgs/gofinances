@@ -18,11 +18,19 @@ import {
   Title,
 } from "./styles"
 import { useFocusEffect } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native";
+import { useTheme } from "styled-components";
+import { Loading } from "../../components/Loading";
 
 interface AmountProps {
   income: string;
   outcome: string;
   total: string;
+}
+
+interface HightLightProps {
+  incomeDate: string,
+  outcomeDate: string
 }
 
 export interface DataListProps extends TransactionCardProps {
@@ -31,12 +39,28 @@ export interface DataListProps extends TransactionCardProps {
 
 export const Dashboard = () => {
 
+  const theme = useTheme();
+
+  const [loading, setLoading] = useState(true);
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
   const [transactionsAmount, setTransactionsAmount] = useState<AmountProps>({
     income: "R$ 0,00",
     outcome: "R$ 0,00",
     total: "R$ 0,00"
   })
+  const [hightLightsLastUpdate, setHightLightsLastUpdate] = useState<HightLightProps>({
+    incomeDate: '',
+    outcomeDate: ''
+  })
+
+  const getLastTransactionDate = (transactions: DataListProps[], type: 'Income' | 'Outcome') => {
+
+    const transactionsByThisType = transactions.filter((transaction) => transaction.type === type);
+    const transactionsTimestamp = transactionsByThisType.map((transaction) => new Date(transaction.date).getTime());
+    const lastTransaction = Math.max(...transactionsTimestamp);
+
+    return new Date(lastTransaction).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long'})
+  };
 
   const getTransactions = async () => {
       const transactionKey = "@gofinances:transaction";
@@ -73,13 +97,19 @@ export const Dashboard = () => {
 
         total = income - outcome
 
+        setTransactionsList(formatedTransactions);
         setTransactionsAmount({
           income: income.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
           outcome: outcome.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
           total: total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'})
+        });
+        setHightLightsLastUpdate({
+          incomeDate: getLastTransactionDate(allTransactions, 'Income'),
+          outcomeDate: getLastTransactionDate(allTransactions, 'Outcome'),
         })
-        setTransactionsList(formatedTransactions)
       }
+
+      setLoading(false);
   }
 
   useFocusEffect(useCallback(() => {
@@ -88,53 +118,60 @@ export const Dashboard = () => {
 
   return (
       <Container>
-        <Header>
-          <HeaderWrapper>
-            <UserInfo>
-              <Photo source={{uri: "https://avatars.githubusercontent.com/u/64373381?v=}4"}}/>
-              <Infos>
-                <Greeting>Olá, </Greeting>
-                <UserName>Eduardo</UserName>
-              </Infos>
-            </UserInfo>
+        {loading 
+        ? 
+          <Loading />
+        : 
+        <>
+          <Header>
+            <HeaderWrapper>
+              <UserInfo>
+                <Photo source={{uri: "https://avatars.githubusercontent.com/u/64373381?v=}4"}}/>
+                <Infos>
+                  <Greeting>Olá, </Greeting>
+                  <UserName>Eduardo</UserName>
+                </Infos>
+              </UserInfo>
             <Icon name='power'/>
             </HeaderWrapper>
-        </Header>
+          </Header>
 
-        <ScrollHorizontalHightLightCards>
-          <HighLightsCard 
-            type='up'
-            title={"Entradas"} 
-            ammount={transactionsAmount.income} 
-            lastTransaction={"Última entrada dia 13 de abril"}
-          />
-          <HighLightsCard 
-            type='down'
-            title={"Saídas"} 
-            ammount={transactionsAmount.outcome} 
-            lastTransaction={"Última saída dia 03 de abril"}
-          />
+          <ScrollHorizontalHightLightCards>
+            <HighLightsCard 
+              type='up'
+              title={"Entradas"} 
+              ammount={transactionsAmount.income} 
+              lastTransaction={`Última entrada dia ${hightLightsLastUpdate.incomeDate}`}
+            />
+            <HighLightsCard 
+              type='down'
+              title={"Saídas"} 
+              ammount={transactionsAmount.outcome} 
+              lastTransaction={`Última saída dia ${hightLightsLastUpdate.outcomeDate}`}
+            />
 
-          <HighLightsCard 
-            type='dollar'
-            title={"Total"} 
-            ammount={transactionsAmount.total} 
-            lastTransaction={"01 á 16 de abril"}
-          />
-        </ScrollHorizontalHightLightCards>
+            <HighLightsCard 
+              type='dollar'
+              title={"Total"} 
+              ammount={transactionsAmount.total} 
+              lastTransaction={"01 á 16 de abril"}
+            />
+          </ScrollHorizontalHightLightCards>
 
-        {transactionsList.length > 0 ?
-        <>
-          <Title>Listagem</Title>
-          <ScrollVerticalTransactionsCards
-            data={transactionsList}
-            keyExtractor={ item => item.id}
-            renderItem={ ({ item }) => <TransactionCard data={item} />} 
-          />
-        </>
-        :
-          <Title>Lista de transações vazia</Title>
-        }
+          {transactionsList.length > 0 ?
+          <>
+            <Title>Listagem</Title>
+            <ScrollVerticalTransactionsCards
+              data={transactionsList}
+              keyExtractor={ item => item.id}
+              renderItem={ ({ item }) => <TransactionCard data={item} />} 
+            />
+          </>
+          :
+            <Title>Lista de transações vazia</Title>
+          }
+        
+        </>}
       </Container>
   )
 } 
