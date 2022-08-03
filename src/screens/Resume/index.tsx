@@ -1,8 +1,10 @@
 import React, { ReactElement, useCallback, useState } from "react";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { RFValue } from "react-native-responsive-fontsize";
 import { VictoryPie } from "victory-native"
+
 import { HistoryCard } from "../../components/HistoryCard";
 import { Loading } from "../../components/Loading";
 import { categories } from "../../utils/categories";
@@ -13,8 +15,9 @@ import {
     HistoryCardsContent, 
     ChartContent
 } from "./styles";
+
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useTheme } from "styled-components";
-import { RFValue } from "react-native-responsive-fontsize";
 
 interface AllResumeProps {
     type: 'Income' | 'Outcome';
@@ -100,7 +103,9 @@ export const Resume = (): ReactElement => {
                         x={`totalPercent`}
                         y={'total'}
                         colorScale={resumes.map((resume) => resume.color)}
-                        labelRadius={100}
+                        labelRadius={112.5}
+                        padAngle={({ datum }) => datum.y}
+                        innerRadius={100}
                         style={
                             { 
                                 labels: { 
@@ -114,7 +119,11 @@ export const Resume = (): ReactElement => {
                     />
                 </ChartContent>
 
-                <HistoryCardsContent>
+                <HistoryCardsContent
+                    contentContainerStyle={{
+                        paddingBottom: useBottomTabBarHeight()
+                    }}
+                >
                     {resumes.map((resume, index) => (
                         <HistoryCard
                             key={index.toString()}
