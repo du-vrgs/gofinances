@@ -13,11 +13,17 @@ import {
     Header, 
     Title, 
     HistoryCardsContent, 
-    ChartContent
+    ChartContent,
+    SelectMonthContent,
+    SelectMonthButton,
+    SelectMonthIcon,
+    MonthSelected
 } from "./styles";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useTheme } from "styled-components";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { View } from "react-native";
 
 interface AllResumeProps {
     type: 'Income' | 'Outcome';
@@ -38,6 +44,7 @@ interface ResumeProps {
 export const Resume = (): ReactElement => {
 
     const theme = useTheme();
+    const tabBottomHeight = useBottomTabBarHeight();
     const [loading, setLoading] = useState(true);
     const [resumes, setResumes] = useState<ResumeProps[]>([]);
 
@@ -97,6 +104,22 @@ export const Resume = (): ReactElement => {
                     </Title>
                 </Header>
 
+                    <SelectMonthContent>
+                        <SelectMonthButton 
+                            onPress={() => console.log('HERE')} 
+                        >
+                            <SelectMonthIcon name="chevron-left"/>
+                        </SelectMonthButton>
+
+                        <MonthSelected>
+                            Janeiro
+                        </MonthSelected>
+
+                        <SelectMonthButton>
+                            <SelectMonthIcon name="chevron-right"/>
+                        </SelectMonthButton>
+                    </SelectMonthContent>
+
                 <ChartContent>
                     <VictoryPie 
                         data={resumes}
@@ -121,7 +144,7 @@ export const Resume = (): ReactElement => {
 
                 <HistoryCardsContent
                     contentContainerStyle={{
-                        paddingBottom: useBottomTabBarHeight()
+                        paddingBottom: tabBottomHeight
                     }}
                 >
                     {resumes.map((resume, index) => (

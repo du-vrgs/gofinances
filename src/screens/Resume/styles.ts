@@ -1,7 +1,12 @@
+import { PropsWithChildren, ReactNode } from "react";
 import { ScrollViewProps } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Feather } from '@expo/vector-icons';
+import { BorderlessButton, BorderlessButtonProps, ScrollView } from "react-native-gesture-handler";
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
+
+interface BordlessProps extends PropsWithChildren<BorderlessButtonProps> {
+}
 
 export const ResumeContainer = styled.View`
     flex: 1;
@@ -36,5 +41,25 @@ export const HistoryCardsContent = styled(ScrollView).attrs({
     showsVerticalScrollIndicator: false,
 })<ScrollViewProps>`
     padding: 0px 24px;
-    flex: .90;
+    flex: .90; 
+`;
+
+
+export const SelectMonthContent = styled.View`
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 24px;
+    padding-top: 24px;
+`;
+export const SelectMonthButton = styled(BorderlessButton)<BordlessProps>`
+`;
+export const SelectMonthIcon = styled(Feather)`
+    font-size: ${RFValue(24)}px;
+    font-family: ${({theme}) => theme.fonts.medium};
+`;
+export const MonthSelected = styled.Text`
+    font-family: ${({theme}) => theme.fonts.regular};
+    font-size: ${RFValue(20)}px;
 `;

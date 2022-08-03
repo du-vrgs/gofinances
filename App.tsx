@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from 'styled-components';
 import 'intl';
-import 'intl/locale-data/jsonp/pt-BR';
+import 'intl/locale-data/jsonp/pt-BR'; 
 
 import {
   Poppins_400Regular,
@@ -51,11 +51,11 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <View onLayout={onLayoutRootView} style={{flex: 1}}>
+      <GestureHandlerRootView onLayout={onLayoutRootView} style={{flex: 1}}>
         <NavigationContainer>
           <AppRoutes />
         </NavigationContainer>
-      </View>
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }

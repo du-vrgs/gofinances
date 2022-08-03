@@ -1,7 +1,6 @@
-import { RectButtonProps } from 'react-native-gesture-handler';
 import { PropsWithChildren } from 'react';
+import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
-import { RectButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled, { css } from "styled-components/native";
 
