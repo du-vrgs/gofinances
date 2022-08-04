@@ -1,4 +1,5 @@
 import React, { ReactElement, useCallback, useState } from "react";
+import { Text } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -24,8 +25,6 @@ import {
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useTheme } from "styled-components";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Text, View } from "react-native";
 
 interface AllResumeProps {
     type: 'Income' | 'Outcome';
@@ -56,6 +55,7 @@ export const Resume = (): ReactElement => {
     }
 
     const getResumes = async () => {
+        setLoading(true);
         const transactionKey = "@gofinances:transaction";
         const storageResumes = await AsyncStorage.getItem(transactionKey);
         const allResumes: AllResumeProps[] = storageResumes ? JSON.parse(storageResumes) : [];
@@ -93,15 +93,16 @@ export const Resume = (): ReactElement => {
                 });
     
                 setResumes(resumesList.filter(resume => resume !== undefined));
-                setLoading(false);
+                setTimeout(() => setLoading(false), 1200);
+
             }
             else {
                 setResumes([]);
-                setLoading(false);
+                setTimeout(() => setLoading(false), 1200);
             }
         }
         else {
-            setLoading(false);
+            setTimeout(() => setLoading(false), 1200);
         }
     };
 
@@ -110,18 +111,18 @@ export const Resume = (): ReactElement => {
     }, [selectedDate]));
 
     return (
-        <>
-        {loading 
-        ? 
-            <Loading /> 
-        : 
-            <ResumeContainer>
-                <Header>
-                    <Title>
-                        Resumo
-                    </Title>
-                </Header>
+        <ResumeContainer>
+            <Header>
+                <Title>
+                    Resumo
+                </Title>
+            </Header>
 
+            {loading 
+            ? 
+                <Loading /> 
+            :
+            <>
                 <SelectMonthContent>
                     <SelectMonthButton onPress={() => handleChangeDate('previous')}>
                         <SelectMonthIcon name="chevron-left"/>
@@ -179,8 +180,7 @@ export const Resume = (): ReactElement => {
                 (<Text>Nenhum registro para essa data</Text>)
                 }
 
-            </ResumeContainer>
-        }
-        </>
+            </>}
+        </ResumeContainer>
     )
 }
