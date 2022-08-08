@@ -7,6 +7,7 @@ import theme from './src/global/styles/theme';
 import { ThemeProvider } from 'styled-components';
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR'; 
+import { AuthProvider } from './src/providers/AuthContext';
 
 import {
   Poppins_400Regular,
@@ -55,11 +56,13 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <GestureHandlerRootView onLayout={onLayoutRootView} style={{flex: 1}}>
-        {/* <NavigationContainer>
-          <StatusBar barStyle='light-content' backgroundColor={theme.colors.primary} />
-          <AppRoutes />
-        </NavigationContainer> */}
-        <SignIn />
+        <AuthProvider>
+          {/* <NavigationContainer>
+            <StatusBar barStyle='light-content' backgroundColor={theme.colors.primary} />
+            <AppRoutes />
+          </NavigationContainer> */}
+          <SignIn />
+        </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>
   );
