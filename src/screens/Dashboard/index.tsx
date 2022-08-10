@@ -1,7 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "../../providers/AuthContext";
+
 import { HighLightsCard } from "../../components/HighLightsCard";
 import { TransactionCard, TransactionCardProps } from "../../components/TransactionCard";
+import { Loading } from "../../components/Loading";
 
 import { 
   DashboardContainer as Container, 
@@ -17,10 +21,6 @@ import {
   ScrollVerticalTransactionsCards,
   Title,
 } from "./styles"
-import { useFocusEffect } from "@react-navigation/native";
-import { ActivityIndicator } from "react-native";
-import { useTheme } from "styled-components";
-import { Loading } from "../../components/Loading";
 
 interface AmountProps {
   income: string;
@@ -39,10 +39,11 @@ export interface DataListProps extends TransactionCardProps {
 
 export const Dashboard = () => {
 
-  const theme = useTheme();
+  const { userInfo } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
+  const hasTransactions = transactionsList.length > 0;
   const [transactionsAmount, setTransactionsAmount] = useState<AmountProps>({
     income: "R$ 0,00",
     outcome: "R$ 0,00",
@@ -126,10 +127,10 @@ export const Dashboard = () => {
           <Header>
             <HeaderWrapper>
               <UserInfo>
-                <Photo source={{uri: "https://avatars.githubusercontent.com/u/64373381?v=}4"}}/>
+                <Photo source={{uri: userInfo.photo }}/>
                 <Infos>
                   <Greeting>Olá, </Greeting>
-                  <UserName>Eduardo</UserName>
+                  <UserName>{userInfo.name}</UserName>
                 </Infos>
               </UserInfo>
             <Icon name='power'/>
@@ -141,20 +142,20 @@ export const Dashboard = () => {
               type='up'
               title={"Entradas"} 
               ammount={transactionsAmount.income} 
-              lastTransaction={`Última entrada dia ${hightLightsLastUpdate.incomeDate}`}
+              lastTransaction={hasTransactions ? `Última entrada dia ${hightLightsLastUpdate.incomeDate}` : 'Nenhuma transação salva ainda'}
             />
             <HighLightsCard 
               type='down'
               title={"Saídas"} 
               ammount={transactionsAmount.outcome} 
-              lastTransaction={`Última saída dia ${hightLightsLastUpdate.outcomeDate}`}
+              lastTransaction={hasTransactions ? `Última saída dia ${hightLightsLastUpdate.outcomeDate}` : 'Nenhuma transação salva ainda'}
             />
 
             <HighLightsCard 
               type='dollar'
               title={"Total"} 
               ammount={transactionsAmount.total} 
-              lastTransaction={"01 á 16 de abril"}
+              lastTransaction={""}
             />
           </ScrollHorizontalHightLightCards>
 
