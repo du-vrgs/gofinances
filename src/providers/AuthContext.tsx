@@ -26,6 +26,9 @@ interface IAuthContextData {
     userInfo: UserInfo,
     signInWithGoogle: () => Promise<void>;
     signInWithApple: () => Promise<void>;
+    signOut(): Promise<void>;
+    signOutLoading: boolean;
+    storageTransactionsKey: string;
 };
 
 const AuthContext = createContext({} as IAuthContextData);
@@ -33,8 +36,12 @@ const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
 
+
     const [loadingStorageUser, setLoadingStorageUser] = useState(true);
+    const [signOutLoading, setSignOutLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
+    const storageUserKey = "@gofinances:user"
+    const storageTransactionsKey = `@gofinances:transaction:${userInfo.id}`
 
     const signInWithGoogle = async () => {
         try {
@@ -63,14 +70,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
                 };
 
                 setUserInfo(user);
-                await AsyncStorage.setItem("@gofinances:user", JSON.stringify(user));
+                await AsyncStorage.setItem(storageUserKey, JSON.stringify(user));
             };
         }
         catch (error) {
             throw new Error(error);
         }
     };
-
     const signInWithApple = async () => {
         try {
             const response = await AppleAuthentication.signInAsync({
@@ -81,21 +87,31 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
             });
 
             if (response) {
-                const user = {
-                    name: response.fullName.givenName,
-                    email: response.email,
-                    id: String(response.user),
-                    photo: null,
+
+                const { fullName, email, user } = response
+
+                const userInfos = {
+                    name: fullName.givenName,
+                    email: email,
+                    id: String(user),
+                    photo: `https://ui-avatars.com/api/?name=${fullName.givenName}&length=2`,
                 };
 
-                setUserInfo(user);
-                await AsyncStorage.setItem("@gofinances:user", JSON.stringify(user));
+                setUserInfo(userInfos);
+                await AsyncStorage.setItem(storageUserKey, JSON.stringify(userInfos));
             }
         }
         catch (error) {
             throw new Error(error);
         };
     };
+    const signOut = async () => {
+        setSignOutLoading(true);
+        await AsyncStorage.removeItem(storageUserKey).then(res => {
+            setUserInfo({} as UserInfo);
+            setSignOutLoading(false);
+        });
+    }
 
     const getStorageUserData = useCallback(async() => {
         const userStorageData = await AsyncStorage.getItem("@gofinances:user");
@@ -112,7 +128,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const exportedValues = {
         userInfo,
         signInWithGoogle,
-        signInWithApple
+        signInWithApple,
+        signOut,
+        signOutLoading,
+        storageTransactionsKey
     };
 
     useEffect(() => {getStorageUserData()}, [getStorageUserData])

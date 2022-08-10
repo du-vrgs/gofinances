@@ -1,10 +1,14 @@
-import React, { useState, ReactElement, useEffect} from 'react'
+import React, { useState, ReactElement } from 'react'
 import { Modal, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigation } from '@react-navigation/native';
 import * as yup from "yup"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from "react-native-uuid"
+
+import { useAuth } from '../../providers/AuthContext';
 
 import { Button } from '../../components/Form/Button';
 import { Select } from '../../components/Form/Select';
@@ -19,7 +23,6 @@ import {
     Fields,
     TransactionTypeButtonsWrraper
 } from "./styles";
-import { useNavigation } from '@react-navigation/native';
 
 enum TransactionType {
     up = 'Income',
@@ -48,11 +51,11 @@ const schema = yup.object().shape({
 
 export const Register = ():ReactElement => {
 
-    const transactionKey = "@gofinances:transaction";
+    const { storageTransactionsKey } = useAuth();
     const { control, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(schema)
     });
-    const isValidInputs = Object.values(errors).length === 0;
+    // const isValidInputs = Object.values(errors).length === 0;
 
     const navigation = useNavigation<NavigationProps>();
 
@@ -104,11 +107,11 @@ export const Register = ():ReactElement => {
                 category: category.key
             };
 
-            const storageTransactions = await AsyncStorage.getItem(transactionKey);
+            const storageTransactions = await AsyncStorage.getItem(storageTransactionsKey);
             const allTransactions = storageTransactions ? JSON.parse(storageTransactions) : [];
             const newTransactions = [...allTransactions, formData];
     
-            await AsyncStorage.setItem(transactionKey, JSON.stringify(newTransactions)).then(() => {
+            await AsyncStorage.setItem(storageTransactionsKey, JSON.stringify(newTransactions)).then(() => {
                 Alert.alert('Save successfully');
                 resetFields();
                 navigation.navigate('Listagem');
@@ -122,15 +125,15 @@ export const Register = ():ReactElement => {
     }
 
     // useEffect(() => {
-    //     // const loadStorage = async () => {
-    //     //     const storage = await AsyncStorage.getItem(transactionKey);
-    //     //     console.log(JSON.parse(storage!));
-    //     // };
+    //     const loadStorage = async () => {
+    //         const storage = await AsyncStorage.getItem(storageTransactionsKey);
+    //         console.log(JSON.parse(storage!));
+    //     };
 
-    //     // loadStorage();
+    //     loadStorage();
 
-    //     // const removeStorage = async () => await AsyncStorage.removeItem(transactionKey);
-    //     // removeStorage();
+    //     const removeStorage = async () => await AsyncStorage.removeItem(transactionKey);
+    //     removeStorage();
     // }, [])
 
     return (

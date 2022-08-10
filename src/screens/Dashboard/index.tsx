@@ -21,6 +21,8 @@ import {
   ScrollVerticalTransactionsCards,
   Title,
 } from "./styles"
+import { ActivityIndicator } from "react-native";
+import theme from "../../global/styles/theme";
 
 interface AmountProps {
   income: string;
@@ -39,11 +41,10 @@ export interface DataListProps extends TransactionCardProps {
 
 export const Dashboard = () => {
 
-  const { userInfo } = useAuth();
+  const { userInfo, signOut, signOutLoading, storageTransactionsKey } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
-  const hasTransactions = transactionsList.length > 0;
   const [transactionsAmount, setTransactionsAmount] = useState<AmountProps>({
     income: "R$ 0,00",
     outcome: "R$ 0,00",
@@ -53,6 +54,8 @@ export const Dashboard = () => {
     incomeDate: '',
     outcomeDate: ''
   })
+
+  const hasTransactionsThisType = (transactionType: 'Income' | 'Outcome') => transactionsList.some(transaction => transaction.type === transactionType);
 
   const getLastTransactionDate = (transactions: DataListProps[], type: 'Income' | 'Outcome') => {
 
@@ -64,8 +67,8 @@ export const Dashboard = () => {
   };
 
   const getTransactions = async () => {
-      const transactionKey = "@gofinances:transaction";
-      const storageTransactions = await AsyncStorage.getItem(transactionKey);
+      // const transactionKey = `@gofinances:transaction:${userInfo.id}`;
+      const storageTransactions = await AsyncStorage.getItem(storageTransactionsKey);
       const allTransactions = storageTransactions ? JSON.parse(storageTransactions) : [];
 
       if (allTransactions.length) {
@@ -133,7 +136,13 @@ export const Dashboard = () => {
                   <UserName>{userInfo.name}</UserName>
                 </Infos>
               </UserInfo>
-            <Icon name='power'/>
+              {signOutLoading 
+              ? 
+              <ActivityIndicator 
+                size={20} 
+                color={theme.colors.secondary}
+              /> 
+              : <Icon name='power' onPress={signOut} />}
             </HeaderWrapper>
           </Header>
 
@@ -142,13 +151,13 @@ export const Dashboard = () => {
               type='up'
               title={"Entradas"} 
               ammount={transactionsAmount.income} 
-              lastTransaction={hasTransactions ? `Última entrada dia ${hightLightsLastUpdate.incomeDate}` : 'Nenhuma transação salva ainda'}
+              lastTransaction={hasTransactionsThisType('Income') ? `Última entrada dia ${hightLightsLastUpdate.incomeDate}` : 'Nenhuma transação de saída ainda'}
             />
             <HighLightsCard 
               type='down'
               title={"Saídas"} 
               ammount={transactionsAmount.outcome} 
-              lastTransaction={hasTransactions ? `Última saída dia ${hightLightsLastUpdate.outcomeDate}` : 'Nenhuma transação salva ainda'}
+              lastTransaction={hasTransactionsThisType('Outcome') ? `Última saída dia ${hightLightsLastUpdate.outcomeDate}` : 'Nenhuma transação de entrada ainda'}
             />
 
             <HighLightsCard 

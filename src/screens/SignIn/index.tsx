@@ -1,4 +1,7 @@
 import React, { ReactElement } from "react";
+import { Alert, Platform } from "react-native";
+
+import { useAuth } from "../../providers/AuthContext";
 import { 
     HeaderContent, 
     SignInContainer,
@@ -8,13 +11,11 @@ import {
     ButtonsWrapper
 } from "./styles";
 
+import { SocialSignInButton } from "../../components/SocialSignInButton";
 import AppLogo from "../../assets/appLogo.svg";
 import AppleLogo from "../../assets/appleLogo.svg";
 import GoogleLogo from "../../assets/googleLogo.svg";
 
-import { SocialSignInButton } from "../../components/SocialSignInButton";
-import { useAuth } from "../../providers/AuthContext";
-import { Alert } from "react-native";
 
 export const SignIn = (): ReactElement => {
 
@@ -29,7 +30,6 @@ export const SignIn = (): ReactElement => {
             Alert.alert('Não foi possível conectar com a conta Google');
         }
     };
-
     const handleSigInWithApple = async () => {
         try {
             await signInWithApple();
@@ -62,11 +62,13 @@ export const SignIn = (): ReactElement => {
                         title="Entrar com Google" 
                         svg={GoogleLogo}
                     />
-                    <SocialSignInButton
-                        onPress={handleSigInWithApple}
-                        title="Entrar com Apple" 
-                        svg={AppleLogo}
-                    />
+                    {Platform.OS === 'ios' && 
+                        <SocialSignInButton
+                            onPress={handleSigInWithApple}
+                            title="Entrar com Apple" 
+                            svg={AppleLogo}
+                        />
+                    }
                 </ButtonsWrapper>
             </FooterContent>
         </SignInContainer>

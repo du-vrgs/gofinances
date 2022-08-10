@@ -25,6 +25,7 @@ import {
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useTheme } from "styled-components";
+import { useAuth } from "../../providers/AuthContext";
 
 interface AllResumeProps {
     type: 'Income' | 'Outcome';
@@ -46,18 +47,18 @@ export const Resume = (): ReactElement => {
 
     const theme = useTheme();
     const tabBottomHeight = useBottomTabBarHeight();
+    const { storageTransactionsKey } = useAuth();
+
     const [loading, setLoading] = useState(true);
     const [resumes, setResumes] = useState<ResumeProps[]>([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const handleChangeDate = (action: 'next' | 'previous') => {
         setSelectedDate((action === 'next') ? addMonths(selectedDate, 1) : subMonths(selectedDate, 1));
-    }
+    };
 
     const getResumes = async () => {
-        setLoading(true);
-        const transactionKey = "@gofinances:transaction";
-        const storageResumes = await AsyncStorage.getItem(transactionKey);
+        const storageResumes = await AsyncStorage.getItem(storageTransactionsKey);
         const allResumes: AllResumeProps[] = storageResumes ? JSON.parse(storageResumes) : [];
 
         if (allResumes.length) {
@@ -107,7 +108,8 @@ export const Resume = (): ReactElement => {
     };
 
     useFocusEffect(useCallback(() => {
-        getResumes()
+        setLoading(true);
+        getResumes();
     }, [selectedDate]));
 
     return (
