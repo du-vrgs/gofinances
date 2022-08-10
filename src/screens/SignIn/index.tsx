@@ -18,17 +18,27 @@ import { Alert } from "react-native";
 
 export const SignIn = (): ReactElement => {
 
-    const { signInWithGoogle } = useAuth();
+    const { signInWithGoogle, signInWithApple } = useAuth();
 
     const handleSignInWithGoogle = async () => {
         try {
             await signInWithGoogle();
         }
         catch (error) {
-            console.log('[screens][SignIn][handleSignInWithGoogle][ERROR]', error)
-            Alert.alert('Não foi possível conectar ao Google')
+            console.log('[screens][SignIn][handleSignInWithGoogle][ERROR]', error);
+            Alert.alert('Não foi possível conectar com a conta Google');
         }
-    }
+    };
+
+    const handleSigInWithApple = async () => {
+        try {
+            await signInWithApple();
+        }
+        catch (error) {
+            console.log('[screens][SignIn][handleSigInWithApple][ERROR]', error);
+            Alert.alert('Não foi possível conectar com a conta Apple');
+        }
+    };
 
     return (
         <SignInContainer>
@@ -52,9 +62,13 @@ export const SignIn = (): ReactElement => {
                         title="Entrar com Google" 
                         svg={GoogleLogo}
                     />
-                    <SocialSignInButton title="Entrar com Apple" svg={AppleLogo}/>
+                    <SocialSignInButton
+                        onPress={handleSigInWithApple}
+                        title="Entrar com Apple" 
+                        svg={AppleLogo}
+                    />
                 </ButtonsWrapper>
             </FooterContent>
         </SignInContainer>
-    )
-}
+    );
+};

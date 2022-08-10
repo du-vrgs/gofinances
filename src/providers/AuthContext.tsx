@@ -1,5 +1,8 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import * as AuthSession from 'expo-auth-session';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Loading } from "../components/Loading";
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -22,6 +25,7 @@ interface UserInfo {
 interface IAuthContextData {
     userInfo: UserInfo,
     signInWithGoogle: () => Promise<void>;
+    signInWithApple: () => Promise<void>;
 };
 
 const AuthContext = createContext({} as IAuthContextData);
@@ -29,12 +33,14 @@ const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
 
-    const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
+    const [loadingStorageUser, setLoadingStorageUser] = useState(true);
+    const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
 
     const signInWithGoogle = async () => {
         try {
-            const CLIENT_ID = process.env;
-            const REDIRECT_URI = process.env;
+            const CLIENT_ID = process.env.CLIENT_ID;
+            const REDIRECT_URI = process.env.REDIRECT_URI;
+
             const RESPONSE_TYPE = 'token';
             const SCOPE = encodeURI('profile email');
 
@@ -47,30 +53,73 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
                     headers: {
                         Authorization: `Bearer ${params.access_token}`
                     }
-                })
+                });
                 const userInfo = await response.json();
-
-                setUserInfo({
+                const user = {
                     name: userInfo.given_name,
                     email: userInfo.email,
                     id: userInfo.sub,
                     photo: userInfo.picture
-                })
+                };
+
+                setUserInfo(user);
+                await AsyncStorage.setItem("@gofinances:user", JSON.stringify(user));
+            };
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    const signInWithApple = async () => {
+        try {
+            const response = await AppleAuthentication.signInAsync({
+                requestedScopes: [
+                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                ]
+            });
+
+            if (response) {
+                const user = {
+                    name: response.fullName.givenName,
+                    email: response.email,
+                    id: String(response.user),
+                    photo: null,
+                };
+
+                setUserInfo(user);
+                await AsyncStorage.setItem("@gofinances:user", JSON.stringify(user));
             }
         }
         catch (error) {
-            throw new Error(error)
+            throw new Error(error);
+        };
+    };
+
+    const getStorageUserData = useCallback(async() => {
+        const userStorageData = await AsyncStorage.getItem("@gofinances:user");
+
+        if (userStorageData) {
+            const user = JSON.parse(userStorageData) as UserInfo;
+
+            setUserInfo(user);
         }
-    }
+
+        setTimeout(() => setLoadingStorageUser(false), 2100);
+    }, []);
 
     const exportedValues = {
         userInfo,
-        signInWithGoogle
+        signInWithGoogle,
+        signInWithApple
     };
+
+    useEffect(() => {getStorageUserData()}, [getStorageUserData])
 
     return (
         <AuthContext.Provider value={exportedValues}>
-            {children}
+            {loadingStorageUser ? <Loading /> : children}
         </AuthContext.Provider>
     );
 };

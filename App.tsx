@@ -19,6 +19,7 @@ import * as Font from 'expo-font';
 
 import { AppRoutes } from './src/routes/app.routes';
 import { SignIn } from './src/screens/SignIn';
+import { Routes } from './src/routes';
 
 export default function App() {
 
@@ -57,11 +58,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <GestureHandlerRootView onLayout={onLayoutRootView} style={{flex: 1}}>
         <AuthProvider>
-          {/* <NavigationContainer>
-            <StatusBar barStyle='light-content' backgroundColor={theme.colors.primary} />
-            <AppRoutes />
-          </NavigationContainer> */}
-          <SignIn />
+          <Routes />
         </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>
