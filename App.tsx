@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'react-native';
 
 import theme from './src/global/styles/theme';
 import { ThemeProvider } from 'styled-components';
+
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR'; 
-import { AuthProvider } from './src/providers/AuthContext';
-
 import {
   Poppins_400Regular,
   Poppins_500Medium,
@@ -17,8 +14,7 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 
-import { AppRoutes } from './src/routes/app.routes';
-import { SignIn } from './src/screens/SignIn';
+import { AuthProvider } from './src/providers/AuthContext';
 import { Routes } from './src/routes';
 
 export default function App() {

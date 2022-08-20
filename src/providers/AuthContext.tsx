@@ -138,7 +138,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
     return (
         <AuthContext.Provider value={exportedValues}>
-            {loadingStorageUser ? <Loading /> : children}
+            {/* {loadingStorageUser ? <Loading /> : children} */}
+            {children}
         </AuthContext.Provider>
     );
 };
