@@ -4,9 +4,11 @@ import { SplashContainer } from "./styles";
 
 import Logo from "../../assets/splashLogo.svg"
 import AppName from "../../assets/splashLogo2.svg"
+import { useNavigation } from "@react-navigation/native";
 
 export const Splash = (): ReactElement => {
 
+    const navigation = useNavigation();
     const animation = useSharedValue(0);
     const screenAnimation = useSharedValue(0);
 
@@ -42,6 +44,8 @@ export const Splash = (): ReactElement => {
     useEffect(() => {
         animation.value = withTiming(50, { duration: 1000 });
         screenAnimation.value = withTiming(50, { duration: 3000 });
+
+        setTimeout(() => navigation.navigate('signIn'), 3100)
     }, [])
 
     return (
