@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../../providers/AuthContext";
@@ -20,9 +20,11 @@ import {
   ScrollHorizontalHightLightCards,
   ScrollVerticalTransactionsCards,
   Title,
+  AnimatedScrollVerticalTransactionsCards,
 } from "./styles"
 import { ActivityIndicator } from "react-native";
 import theme from "../../global/styles/theme";
+import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 
 interface AmountProps {
   income: string;
@@ -41,7 +43,21 @@ export interface DataListProps extends TransactionCardProps {
 
 export const Dashboard = () => {
 
-  const { userInfo, signOut, signOutLoading, storageTransactionsKey, isUserSignOn } = useAuth();
+  const headerRef = useRef(null);
+  const scrollY = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler(event => {
+    scrollY.value = event.contentOffset.y;
+  })
+
+  const headerAnimatedStyle = useAnimatedStyle(() => ({
+    height: interpolate(scrollY.value, [0, 70], [200, 120], Extrapolate.CLAMP)
+  }))
+
+  const highLightsAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(scrollY.value, [0, 50], [1, 0], Extrapolate.CLAMP),
+  }))
+
+  const { userInfo, signOut, signOutLoading, storageTransactionsKey } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
@@ -127,7 +143,10 @@ export const Dashboard = () => {
           <Loading />
         : 
         <>
-          <Header>
+          <Header 
+            style={headerAnimatedStyle}
+            ref={headerRef}
+          >
             <HeaderWrapper>
               <UserInfo>
                 <Photo source={{uri: userInfo.photo }}/>
@@ -146,7 +165,10 @@ export const Dashboard = () => {
             </HeaderWrapper>
           </Header>
 
-          <ScrollHorizontalHightLightCards>
+          <ScrollHorizontalHightLightCards
+            style={highLightsAnimatedStyle}
+            scrollEventThrottle={16}
+          >
             <HighLightsCard 
               type='up'
               title={"Entradas"} 
@@ -171,10 +193,13 @@ export const Dashboard = () => {
           {transactionsList.length > 0 ?
           <>
             <Title>Listagem</Title>
-            <ScrollVerticalTransactionsCards
+            <AnimatedScrollVerticalTransactionsCards
+              onScroll={scrollHandler}
+              scrollEventThrottle={16}
+
               data={transactionsList}
               keyExtractor={ item => item.id}
-              renderItem={ ({ item }) => <TransactionCard data={item} />} 
+              renderItem={ ({ item }) => <TransactionCard data={item} />}
             />
           </>
           :

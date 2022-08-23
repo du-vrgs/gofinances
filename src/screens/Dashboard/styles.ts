@@ -3,10 +3,12 @@ import styled from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Feather } from "@expo/vector-icons";
 import { FlatList, FlatListProps } from "react-native";
+import Animated from 'react-native-reanimated';
 
 export const DashboardContainer = styled.View`
     flex: 1;
     background-color: ${({theme}) => theme.colors.background};
+    justify-content: flex-end;
 `
 
 export const HeaderWrapper = styled.View`
@@ -14,15 +16,19 @@ export const HeaderWrapper = styled.View`
     justify-content: space-between;
     align-items: center;
     margin-top: ${RFPercentage(8)}px;
-
 `
 
-export const Header = styled.View`
+export const Header = styled(Animated.View)`
     width: 100%;
     height: ${RFPercentage(42)}px;
     background-color: ${({theme}) => theme.colors.primary};
 
     padding: 0 24px;
+
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+    z-index: 1;
 `
 
 export const UserInfo = styled.View`
@@ -52,13 +58,15 @@ export const Icon = styled(Feather)`
     font-size: 24px;
 `
 
-export const ScrollHorizontalHightLightCards = styled.ScrollView.attrs({
+export const ScrollHorizontalHightLightCards = styled(Animated.ScrollView).attrs({
     horizontal: true,
     showsHorizontalScrollIndicator: false,
     contentContainerStyle: { paddingHorizontal: 24 }
 })`
     width: 100%;
     position: absolute;
+    top: -25px;
+    z-index: 2;
     margin-top: ${RFPercentage(24)}px;
 `
 
@@ -70,6 +78,15 @@ export const ScrollVerticalTransactionsCards = styled(
 })`
     flex: .95;
 `
+
+export const AnimatedScrollVerticalTransactionsCards = styled(
+    Animated.FlatList).attrs({
+    showsVerticalScrollIndicator: false,
+    contentContainerStyle: { paddingHorizontal: 24 }
+})<DataListProps>`
+    flex: .75;
+`
+
 export const Title = styled.Text`
     font-size: ${RFValue(18)}px;
     font-family: ${({theme}) => theme.fonts.regular};
