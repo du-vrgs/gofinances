@@ -76,6 +76,6 @@ export const Title = styled.Text`
     color: ${({theme}) => theme.colors.text_dark};
     margin-bottom: 18px;
     margin-top: ${RFPercentage(12)}px;
-    padding-left: 24;
+    padding-left: 24px;
 
 `

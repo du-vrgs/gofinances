@@ -41,7 +41,7 @@ export interface DataListProps extends TransactionCardProps {
 
 export const Dashboard = () => {
 
-  const { userInfo, signOut, signOutLoading, storageTransactionsKey } = useAuth();
+  const { userInfo, signOut, signOutLoading, storageTransactionsKey, isUserSignOn } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
@@ -122,7 +122,7 @@ export const Dashboard = () => {
 
   return (
       <Container>
-        {loading 
+        {loading
         ? 
           <Loading />
         : 

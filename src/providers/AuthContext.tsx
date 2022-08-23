@@ -29,6 +29,7 @@ interface IAuthContextData {
     signOut(): Promise<void>;
     signOutLoading: boolean;
     storageTransactionsKey: string;
+    isUserSignOn: boolean;
 };
 
 const AuthContext = createContext({} as IAuthContextData);
@@ -36,10 +37,10 @@ const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
 
-
     const [loadingStorageUser, setLoadingStorageUser] = useState(true);
     const [signOutLoading, setSignOutLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
+    const isUserSignOn = !!userInfo.id;
     const storageUserKey = "@gofinances:user"
     const storageTransactionsKey = `@gofinances:transaction:${userInfo.id}`
 
@@ -56,6 +57,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
             const { params, type } = await AuthSession.startAsync({ authUrl }) as IAuthtenticationResponse;
 
             if ( type === 'success') {
+                setSignOutLoading(true);
                 const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
                     headers: {
                         Authorization: `Bearer ${params.access_token}`
@@ -70,6 +72,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
                 };
 
                 setUserInfo(user);
+                setSignOutLoading(false);
+
                 await AsyncStorage.setItem(storageUserKey, JSON.stringify(user));
             };
         }
@@ -131,7 +135,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         signInWithApple,
         signOut,
         signOutLoading,
-        storageTransactionsKey
+        storageTransactionsKey,
+        isUserSignOn,
     };
 
     useEffect(() => {getStorageUserData()}, [getStorageUserData])

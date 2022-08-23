@@ -7,11 +7,11 @@ import { AuthenticatedRoutes } from "./authenticated.routes";
 
 export const Routes = () => {
 
-    const { userInfo } = useAuth();
+    const { isUserSignOn } = useAuth();
 
     return (
         <NavigationContainer>
-            {userInfo.id ? <AuthenticatedRoutes /> : <AppRoutes />}
+            {isUserSignOn ? <AuthenticatedRoutes /> : <AppRoutes />}
         </NavigationContainer>
     );
 };

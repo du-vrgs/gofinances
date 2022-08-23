@@ -5,9 +5,11 @@ import { SplashContainer } from "./styles";
 import Logo from "../../assets/splashLogo.svg"
 import AppName from "../../assets/splashLogo2.svg"
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../providers/AuthContext";
 
 export const Splash = (): ReactElement => {
 
+    const { isUserSignOn } = useAuth();
     const navigation = useNavigation();
     const animation = useSharedValue(0);
     const screenAnimation = useSharedValue(0);
@@ -15,7 +17,7 @@ export const Splash = (): ReactElement => {
     const screenAninatedStyle = useAnimatedStyle(() => ({
         transform: [
             {
-                translateY: interpolate(screenAnimation.value, [0, 25, 50], [0, 0, -250])
+                translateY: interpolate(screenAnimation.value, [0, 50], [0,-250])
             }
         ]
     }))
@@ -43,9 +45,9 @@ export const Splash = (): ReactElement => {
 
     useEffect(() => {
         animation.value = withTiming(50, { duration: 1000 });
-        screenAnimation.value = withTiming(50, { duration: 3000 });
+        screenAnimation.value = withTiming(50, { duration: 1500 });
 
-        setTimeout(() => navigation.navigate('signIn'), 3100)
+        setTimeout(() => navigation.navigate(isUserSignOn ? 'Listagem' : 'SignIn'), 1550)
     }, [])
 
     return (

@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Alert, Platform } from "react-native";
 
 import { useAuth } from "../../providers/AuthContext";
@@ -16,12 +16,13 @@ import AppLogo from "../../assets/appLogo.svg";
 import AppleLogo from "../../assets/appleLogo.svg";
 import GoogleLogo from "../../assets/googleLogo.svg";
 
-
 export const SignIn = (): ReactElement => {
 
     const { signInWithGoogle, signInWithApple } = useAuth();
+    const [load, setLoad] = useState(false);
 
     const handleSignInWithGoogle = async () => {
+        setLoad(true);
         try {
             await signInWithGoogle();
         }
@@ -61,12 +62,14 @@ export const SignIn = (): ReactElement => {
                         onPress={handleSignInWithGoogle}
                         title="Entrar com Google" 
                         svg={GoogleLogo}
+                        loading={load}
                     />
                     {Platform.OS === 'ios' && 
                         <SocialSignInButton
                             onPress={handleSigInWithApple}
                             title="Entrar com Apple" 
                             svg={AppleLogo}
+                            loading={load}
                         />
                     }
                 </ButtonsWrapper>

@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Dashboard } from "../screens/Dashboard";
 import { Register } from "../screens/Register";
 import { Resume } from "../screens/Resume";
+import { Splash } from "../screens/Splash";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -22,9 +23,24 @@ export const AuthenticatedRoutes = () => {
         tabBarStyle: {
           paddingVertical: Platform.OS === 'ios' ? 20 : 0,
           height: 88
-        }
+        },
+        
       }}
     >
+
+      <Screen 
+        name='splash'
+        component={Splash}
+        options={{
+          tabBarItemStyle: {
+            display: 'none'
+          },
+          tabBarStyle: {
+            display: 'none'
+          }
+        }}
+      />
+
       <Screen 
         name='Listagem'
         component={Dashboard}
