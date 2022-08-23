@@ -1,16 +1,17 @@
 import React, { ReactElement, useEffect } from "react";
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { interpolate, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { SplashContainer } from "./styles";
 
 import Logo from "../../assets/splashLogo.svg"
 import AppName from "../../assets/splashLogo2.svg"
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../providers/AuthContext";
+
 
 export const Splash = (): ReactElement => {
 
     const { isUserSignOn } = useAuth();
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<any>>();
     const animation = useSharedValue(0);
     const screenAnimation = useSharedValue(0);
 
@@ -43,11 +44,16 @@ export const Splash = (): ReactElement => {
         ]
     }))
 
+    const startApp = () => {
+        navigation.navigate(isUserSignOn ? 'Listagem' : 'SignIn')
+    }
+
     useEffect(() => {
         animation.value = withTiming(50, { duration: 1000 });
-        screenAnimation.value = withTiming(50, { duration: 1500 });
-
-        setTimeout(() => navigation.navigate(isUserSignOn ? 'Listagem' : 'SignIn'), 1550)
+        screenAnimation.value = withTiming(50, { duration: 1500 }, (finished) => {
+            'worklet';
+            finished && runOnJS(startApp)();
+        });
     }, [])
 
     return (
