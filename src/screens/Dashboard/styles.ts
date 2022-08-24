@@ -80,10 +80,10 @@ export const ScrollVerticalTransactionsCards = styled(
 `
 
 export const AnimatedScrollVerticalTransactionsCards = styled(
-    Animated.FlatList).attrs({
+    Animated.FlatList<DataListProps>).attrs({
     showsVerticalScrollIndicator: false,
     contentContainerStyle: { paddingHorizontal: 24 }
-})<DataListProps>`
+})`
     flex: .9;
 `
 
