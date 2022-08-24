@@ -8,7 +8,7 @@ import Animated from 'react-native-reanimated';
 export const DashboardContainer = styled.View`
     flex: 1;
     background-color: ${({theme}) => theme.colors.background};
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
 `
 
 export const HeaderWrapper = styled.View`
@@ -84,7 +84,7 @@ export const AnimatedScrollVerticalTransactionsCards = styled(
     showsVerticalScrollIndicator: false,
     contentContainerStyle: { paddingHorizontal: 24 }
 })<DataListProps>`
-    flex: .75;
+    flex: .9;
 `
 
 export const Title = styled.Text`

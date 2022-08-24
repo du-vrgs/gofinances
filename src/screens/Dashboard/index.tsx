@@ -50,11 +50,18 @@ export const Dashboard = () => {
   })
 
   const headerAnimatedStyle = useAnimatedStyle(() => ({
-    height: interpolate(scrollY.value, [0, 70], [200, 120], Extrapolate.CLAMP)
+    height: interpolate(scrollY.value, [0, 250], [250, 120], Extrapolate.CLAMP)
   }))
 
   const highLightsAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollY.value, [0, 50], [1, 0], Extrapolate.CLAMP),
+  }))
+
+  const transanctionsTitleAnimatedStyle = useAnimatedStyle(() => ({
+    height: interpolate(
+      scrollY.value, 
+      [0, 250], 
+      [400, 200], Extrapolate.CLAMP),
   }))
 
   const { userInfo, signOut, signOutLoading, storageTransactionsKey } = useAuth();
@@ -192,7 +199,12 @@ export const Dashboard = () => {
 
           {transactionsList.length > 0 ?
           <>
-            <Title>Listagem</Title>
+            <Animated.View style={
+              [{ height: 400, justifyContent: 'flex-end' }, 
+              transanctionsTitleAnimatedStyle
+            ]}>
+              <Title>Listagem</Title>
+            </Animated.View>
             <AnimatedScrollVerticalTransactionsCards
               onScroll={scrollHandler}
               scrollEventThrottle={16}
