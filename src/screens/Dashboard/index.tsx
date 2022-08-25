@@ -25,6 +25,7 @@ import {
 import { ActivityIndicator } from "react-native";
 import theme from "../../global/styles/theme";
 import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import { FloatingInfoButton } from "../../components/FloatingInfoButton";
 
 interface AmountProps {
   income: string;
@@ -219,6 +220,7 @@ export const Dashboard = () => {
           }
         
         </>}
+        <FloatingInfoButton />
       </Container>
   )
 } 

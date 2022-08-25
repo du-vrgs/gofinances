@@ -1,4 +1,3 @@
-import { PropsWithChildren, ReactNode } from "react";
 import { ScrollViewProps } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { BorderlessButton, BorderlessButtonProps, ScrollView } from "react-native-gesture-handler";
