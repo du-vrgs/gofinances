@@ -9,7 +9,9 @@ import { addMonths, subMonths, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import { HistoryCard } from "../../components/HistoryCard";
-import { Loading } from "../../components/Loading";
+// import { Loading } from "../../components/Loading";
+import { LoadAnimated } from "../../components/LoadAnimated";
+
 import { categories } from "../../utils/categories";
 import { 
     ResumeContainer, 
@@ -122,7 +124,7 @@ export const Resume = (): ReactElement => {
 
             {loading 
             ? 
-                <Loading /> 
+                <LoadAnimated /> 
             :
             <>
                 <SelectMonthContent>

@@ -1,8 +1,9 @@
+import styled from "styled-components/native";
+import { PropsWithChildren } from "react";
 import { ScrollViewProps } from "react-native";
-import { Feather } from '@expo/vector-icons';
 import { BorderlessButton, BorderlessButtonProps, ScrollView } from "react-native-gesture-handler";
 import { RFValue } from "react-native-responsive-fontsize";
-import styled from "styled-components/native";
+import { Feather } from '@expo/vector-icons';
 
 interface BordlessProps extends PropsWithChildren<BorderlessButtonProps> {
 }

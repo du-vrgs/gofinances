@@ -96,3 +96,9 @@ export const Title = styled.Text`
     padding-left: 24px;
 
 `
+
+export const AlertContent = styled.View`
+    flex: 1;
+    justify-content: flex-end;
+    height: 400px;
+`;

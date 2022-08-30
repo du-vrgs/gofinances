@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react'
+import React, { useState, ReactElement, useEffect } from 'react'
 import { Modal, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 
 import { useForm } from 'react-hook-form';
@@ -124,17 +124,17 @@ export const Register = ():ReactElement => {
  
     }
 
-    // useEffect(() => {
-    //     const loadStorage = async () => {
-    //         const storage = await AsyncStorage.getItem(storageTransactionsKey);
-    //         console.log(JSON.parse(storage!));
-    //     };
+    useEffect(() => {
+        // const loadStorage = async () => {
+        //     const storage = await AsyncStorage.getItem(storageTransactionsKey);
+        //     console.log(JSON.parse(storage!));
+        // };
 
-    //     loadStorage();
+        // loadStorage();
 
-    //     const removeStorage = async () => await AsyncStorage.removeItem(transactionKey);
-    //     removeStorage();
-    // }, [])
+        const removeStorage = async () => await AsyncStorage.removeItem(storageTransactionsKey);
+        removeStorage();
+    }, [])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >

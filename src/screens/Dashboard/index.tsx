@@ -21,11 +21,13 @@ import {
   ScrollHorizontalHightLightCards,
   ScrollVerticalTransactionsCards,
   Title,
-  AnimatedScrollVerticalTransactionsCards
+  AnimatedScrollVerticalTransactionsCards,
+  AlertContent
 } from "./styles";
 import theme from "../../global/styles/theme";
 import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { FloatingInfoButton } from "../../components/FloatingInfoButton";
+import { AlertAnimated } from "../../components/AlertAnimated";
 
 interface AmountProps {
   income: string;
@@ -221,7 +223,10 @@ export const Dashboard = () => {
             />
           </>
           :
+          <AlertContent>
             <Title>Lista de transações vazia</Title>
+            <AlertAnimated />
+          </AlertContent>
           }
         
         </>}
