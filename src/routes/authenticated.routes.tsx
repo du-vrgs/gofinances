@@ -24,8 +24,9 @@ export const AuthenticatedRoutes = () => {
           paddingVertical: Platform.OS === 'ios' ? 20 : 0,
           height: 88
         },
-        
       }}
+      initialRouteName='Listagem'
+      backBehavior='initialRoute'
     >
 
       <Screen 

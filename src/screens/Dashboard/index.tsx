@@ -1,7 +1,8 @@
-import React, { useCallback, useRef, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ActivityIndicator, BackHandler } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../../providers/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { HighLightsCard } from "../../components/HighLightsCard";
 import { TransactionCard, TransactionCardProps } from "../../components/TransactionCard";
@@ -20,9 +21,8 @@ import {
   ScrollHorizontalHightLightCards,
   ScrollVerticalTransactionsCards,
   Title,
-  AnimatedScrollVerticalTransactionsCards,
-} from "./styles"
-import { ActivityIndicator } from "react-native";
+  AnimatedScrollVerticalTransactionsCards
+} from "./styles";
 import theme from "../../global/styles/theme";
 import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { FloatingInfoButton } from "../../components/FloatingInfoButton";
@@ -143,6 +143,11 @@ export const Dashboard = () => {
   useFocusEffect(useCallback(() => {
     getTransactions()
   }, []))
+
+  // TO BLOCK BACK BUTTON in ANDROID
+  // useEffect(() => {
+  //   BackHandler.addEventListener("hardwareBackPress", () => true)
+  // }, [])
 
   return (
       <Container>
