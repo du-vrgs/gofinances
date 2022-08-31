@@ -224,7 +224,7 @@ export const Dashboard = () => {
           </>
           :
           <AlertContent>
-            <Title>Lista de transações vazia</Title>
+            <Title type="secondary">Lista de transações vazia</Title>
             <AlertAnimated />
           </AlertContent>
           }

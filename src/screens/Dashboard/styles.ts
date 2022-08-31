@@ -1,9 +1,13 @@
 import { DataListProps } from './index';
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Feather } from "@expo/vector-icons";
 import { FlatList, FlatListProps } from "react-native";
 import Animated from 'react-native-reanimated';
+
+interface TitleProps {
+    type?: 'primary' | 'secondary'
+}
 
 export const DashboardContainer = styled.View`
     flex: 1;
@@ -87,13 +91,18 @@ export const AnimatedScrollVerticalTransactionsCards = styled(
     flex: .9;
 `
 
-export const Title = styled.Text`
+export const Title = styled.Text<TitleProps>`
     font-size: ${RFValue(18)}px;
     font-family: ${({theme}) => theme.fonts.regular};
     color: ${({theme}) => theme.colors.text_dark};
     margin-bottom: 18px;
     margin-top: ${RFPercentage(12)}px;
     padding-left: 24px;
+
+    ${({ type }) => type === 'secondary' && css`
+        text-align: center;
+        padding: 0px;
+    `}
 
 `
 

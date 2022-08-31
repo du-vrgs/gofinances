@@ -1,4 +1,4 @@
-Lista de transações vazia (Componente)
+componente de Nenhum registro para essa data (Resumo)
 
 logica para mostrar transações por mes em HighLigjhts (Dashboard)
 logica para zerar transações
