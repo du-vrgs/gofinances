@@ -28,6 +28,7 @@ import theme from "../../global/styles/theme";
 import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { FloatingInfoButton } from "../../components/FloatingInfoButton";
 import { AlertAnimated } from "../../components/AlertAnimated";
+import { IconButton } from "../../components/Form/IconButton";
 
 interface AmountProps {
   income: string;
@@ -172,11 +173,13 @@ export const Dashboard = () => {
               </UserInfo>
               {signOutLoading 
               ? 
-              <ActivityIndicator 
-                size={20} 
-                color={theme.colors.secondary}
-              /> 
-              : <Icon name='power' onPress={signOut} />}
+                <ActivityIndicator 
+                  size={20} 
+                  color={theme.colors.secondary}
+                /> 
+              : 
+                <IconButton iconName='power' onPress={signOut} />
+              }
             </HeaderWrapper>
           </Header>
 
