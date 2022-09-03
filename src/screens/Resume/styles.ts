@@ -63,3 +63,14 @@ export const MonthSelected = styled.Text`
     font-family: ${({theme}) => theme.fonts.regular};
     font-size: ${RFValue(20)}px;
 `;
+
+export const NoRegisterContent = styled.View`
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+`;
+export const NoRegisterText = styled.Text`
+    font-size: ${RFValue(18)}px;
+    font-family: ${({theme}) => theme.fonts.regular};
+    color: ${({theme}) => theme.colors.text};
+`;

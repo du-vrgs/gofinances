@@ -22,12 +22,15 @@ import {
     SelectMonthContent,
     SelectMonthButton,
     SelectMonthIcon,
-    MonthSelected
+    MonthSelected,
+    NoRegisterContent,
+    NoRegisterText
 } from "./styles";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { useTheme } from "styled-components";
 import { useAuth } from "../../providers/AuthContext";
+import { AlertAnimated } from "../../components/AlertAnimated";
 
 interface AllResumeProps {
     type: 'Income' | 'Outcome';
@@ -181,9 +184,13 @@ export const Resume = (): ReactElement => {
                     </HistoryCardsContent>
                     </>) 
                 : 
-                (<Text>Nenhum registro para essa data</Text>)
+                <NoRegisterContent>
+                    <NoRegisterText>
+                    Nenhum registro para essa data
+                    </NoRegisterText>
+                    <AlertAnimated />
+                </NoRegisterContent>
                 }
-
             </>}
         </ResumeContainer>
     )
