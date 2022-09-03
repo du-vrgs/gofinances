@@ -5,13 +5,14 @@ import { ButtonContainer, Title } from "./style";
 interface Props extends RectButtonProps {
     title: string;
     onPress: () => void;
+    bgColor?: string;
 };
 
-export const Button = ({title, onPress, ...rest}: Props): ReactElement => {
+export const Button = ({title, onPress, bgColor, ...rest}: Props): ReactElement => {
 
     return (
         <GestureHandlerRootView style={{ width: '100%' }}>
-            <ButtonContainer onPress={onPress} {...rest}>
+            <ButtonContainer onPress={onPress} bgColor={bgColor} {...rest}>
                 <Title>{title}</Title>
             </ButtonContainer>
         </GestureHandlerRootView>
