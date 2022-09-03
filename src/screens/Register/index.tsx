@@ -124,17 +124,17 @@ export const Register = ():ReactElement => {
  
     }
 
-    useEffect(() => {
-        // const loadStorage = async () => {
-        //     const storage = await AsyncStorage.getItem(storageTransactionsKey);
-        //     console.log(JSON.parse(storage!));
-        // };
+    // useEffect(() => {
+    //     // const loadStorage = async () => {
+    //     //     const storage = await AsyncStorage.getItem(storageTransactionsKey);
+    //     //     console.log(JSON.parse(storage!));
+    //     // };
 
-        // loadStorage();
+    //     // loadStorage();
 
-        const removeStorage = async () => await AsyncStorage.removeItem(storageTransactionsKey);
-        removeStorage();
-    }, [])
+    //     // const removeStorage = async () => await AsyncStorage.removeItem(storageTransactionsKey);
+    //     // removeStorage();
+    // }, [])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} >

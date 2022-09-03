@@ -102,6 +102,7 @@ export const Title = styled.Text<TitleProps>`
     ${({ type }) => type === 'secondary' && css`
         text-align: center;
         padding: 0px;
+        color: ${({theme}) => theme.colors.text};
     `}
 
 `

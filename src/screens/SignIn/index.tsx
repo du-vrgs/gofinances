@@ -15,9 +15,12 @@ import { SocialSignInButton } from "../../components/SocialSignInButton";
 import AppLogo from "../../assets/appLogo.svg";
 import AppleLogo from "../../assets/appleLogo.svg";
 import GoogleLogo from "../../assets/googleLogo.svg";
+import { RegisterInput } from "../../components/Form/RegisterInput";
+import { useForm } from "react-hook-form";
 
 export const SignIn = (): ReactElement => {
 
+    const { control, handleSubmit, formState: { errors }, reset } = useForm();
     const { signInWithGoogle, signInWithApple } = useAuth();
     const [load, setLoad] = useState(false);
 
@@ -72,6 +75,12 @@ export const SignIn = (): ReactElement => {
                             loading={load}
                         />
                     }
+                    <RegisterInput
+                        control={control}
+                        name='email'
+                        iconName='mail' 
+                        keyboardType='email-address'
+                    />
                 </ButtonsWrapper>
             </FooterContent>
         </SignInContainer>
