@@ -54,9 +54,15 @@ export const FormWrapper = styled.View`
     flex: 1;
 `;
 
+export const SingInButtonsWrapper = styled.View`
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
 export const LoginTypeButton = styled(RectButton)`
     margin-top: auto;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 `;
 
 export const LoginTypeButtonText = styled.Text`

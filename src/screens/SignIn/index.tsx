@@ -1,5 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Alert, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
+import { useForm } from "react-hook-form";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import { useAuth } from "../../providers/AuthContext";
 import { 
@@ -10,23 +12,26 @@ import {
     FooterContent,
     FormWrapper,
     LoginTypeButton,
-    LoginTypeButtonText
+    LoginTypeButtonText,
+    SingInButtonsWrapper
 } from "./styles";
+import { useTheme } from "styled-components";
+import { NavigationProps } from "../../interfaces";
 
 import { SocialSignInButton } from "../../components/SocialSignInButton";
 import AppLogo from "../../assets/appLogo.svg";
 import AppleLogo from "../../assets/appleLogo.svg";
 import GoogleLogo from "../../assets/googleLogo.svg";
 import { RegisterInput } from "../../components/Form/RegisterInput";
-import { ErrorOption, useForm } from "react-hook-form";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Button } from "../../components/Form/Button";
-import { useTheme } from "styled-components";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useNavigation } from "@react-navigation/native";
 
 export const SignIn = (): ReactElement => {
 
+    const navigation = useNavigation<NavigationProps>();
     const theme = useTheme();
     const schema = yup.object().shape({
         email: yup.string().email('Digite um e-mail válido').required('E-mail obrigatório'),
@@ -66,6 +71,7 @@ export const SignIn = (): ReactElement => {
     const AlertError = (error) => {
         Alert.alert('Ops', String(Object.values(error)[0]['message']))
     }
+    const handleNavigateToSignUp = () => navigation.navigate('SignUpFirstStep');
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -124,11 +130,20 @@ export const SignIn = (): ReactElement => {
                                 iconName='lock' 
                                 keyboardType='visible-password'
                             />
-                            <Button 
-                                title="Entrar"
-                                onPress={handleSubmit(handleSignInWithEmail, AlertError)}
-                                bgColor={theme.colors.primary}
-                            />
+                            <SingInButtonsWrapper>
+                                <Button 
+                                    title="Nova conta"
+                                    onPress={() => handleNavigateToSignUp()}
+                                    bgColor={`${theme.colors.primary}90`}
+                                    size='fifty'
+                                />
+                                <Button 
+                                    title="Entrar"
+                                    onPress={handleSubmit(handleSignInWithEmail, AlertError)}
+                                    bgColor={theme.colors.primary}
+                                    size='fifty'
+                                />
+                            </SingInButtonsWrapper>
                         </>
                         :
                         <>
