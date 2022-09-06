@@ -1,17 +1,28 @@
 import React, { ReactElement } from "react";
 import { Keyboard, KeyboardAvoidingView } from "react-native";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Button } from "../../../components/Form/Button";
 import { RegisterInput } from "../../../components/Form/RegisterInput";
 import { FormContent, HeaderContent, SignUpContainer, SubTitle, Title } from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProps } from "../../../interfaces";
+import { alertError } from "../../../common/alertError";
 
 export const SignUpFirstStep = ():ReactElement => {
 
     const navigation = useNavigation<NavigationProps>();
-    const { control, handleSubmit } = useForm();
+    const schema = yup.object().shape({
+        name: yup.string().required('Nome é obrigatório'),
+        email: yup.string().email('E-mail inválido').required('E-mail é obrigatório')
+    })
+    const { control, handleSubmit } = useForm({
+        resolver: yupResolver(schema)
+    });
 
     const handleNextStep = (formData: FormData) => {
         console.log(formData)
@@ -43,7 +54,7 @@ export const SignUpFirstStep = ():ReactElement => {
                     />
                     <Button 
                         title='Próximo'
-                        onPress={() => handleSubmit(handleNextStep)}
+                        onPress={handleSubmit(handleNextStep, alertError)}
                     />
                 </FormContent>
             </TouchableWithoutFeedback>

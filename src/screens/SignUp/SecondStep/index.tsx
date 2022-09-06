@@ -1,52 +1,68 @@
 import React, { ReactElement } from "react";
 import { Keyboard, KeyboardAvoidingView } from "react-native";
 import { useForm } from "react-hook-form";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { Button } from "../../../components/Form/Button";
-import { RegisterInput } from "../../../components/Form/RegisterInput";
-import { FormContent, HeaderContent, SignUpContainer, SubTitle, Title } from "../styles";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from 'yup';
 import { useNavigation } from "@react-navigation/native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+
+import { Button } from "../../../components/Form/Button";
+import { PasswordInput } from "../../../components/Form/PasswordInput";
 import { NavigationProps } from "../../../interfaces";
+import { FormContent, HeaderContent, SignUpContainer, SubTitle, Title } from "../styles";
+import { alertError } from "../../../common/alertError";
 
 export const SignUpSecondStep = ():ReactElement => {
 
     const navigation = useNavigation<NavigationProps>();
-    // const { control, handleSubmit } = useForm();
+    const schema = yup.object().shape({
+        password: yup
+        .string()
+        .min(9, 'A senha deve conter 9 caractéres')
+        .required('Senha é obriatória'),
 
-    // const handleNextStep = (formData: FormData) => {
-    //     navigation.navigate('SignUpSecondStep', {
-    //         userData: formData
-    //     })
-    // }
+        cpassword: yup
+        .string()
+        .oneOf([yup.ref('password')], 'Senhas diferentes')
+        .required('Confirme a senha')
+    })
+    const { control, handleSubmit } = useForm({
+        resolver: yupResolver(schema)
+    });
+
+    const handleNextStep = (formData: FormData) => {
+        navigation.navigate('SignUpSecondStep', {
+            userData: formData
+        })
+    }
 
     return (
         <SignUpContainer>
-        <KeyboardAvoidingView enabled behavior='position'>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <HeaderContent>
-                    <Title>Crie sua conta{'\n'}de forma{'\n'}simples e rápida</Title>
-                    <SubTitle>Adicione aqui seu Nome e E-mail</SubTitle>
-                </HeaderContent>
+            <KeyboardAvoidingView enabled behavior='position'>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <HeaderContent>
+                        <Title>Falta pouco,{'\n'}agora é só mais{'\n'}um passo</Title>
+                        <SubTitle>Adicione aqui sua Senha</SubTitle>
+                    </HeaderContent>
 
-                <FormContent>
-                    {/* <RegisterInput 
-                        iconName='user'
-                        control={control}
-                        name='name'
-                    />
-                    <RegisterInput 
-                        iconName="mail"
-                        control={control}
-                        name='email'
-                        keyboardType='email-address'
-                    /> */}
-                    <Button 
-                        title='Próximo'
-                        // onPress={() => handleSubmit(handleNextStep)}
-                    />
-                </FormContent>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+                    <FormContent>
+                        <PasswordInput 
+                            name='password'
+                            placeholder="Senha"
+                            control={control}
+                        />
+                        <PasswordInput 
+                            name='cpassword'
+                            placeholder="Confirmar Senha"
+                            control={control}
+                        />
+                        <Button 
+                            title='Cadastrar'
+                            onPress={handleSubmit(handleNextStep, alertError)}
+                        />
+                    </FormContent>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </SignUpContainer>
     )
 }
