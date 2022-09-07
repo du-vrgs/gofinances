@@ -1,9 +1,9 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Keyboard, KeyboardAvoidingView } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import { Button } from "../../../components/Form/Button";
@@ -11,10 +11,25 @@ import { PasswordInput } from "../../../components/Form/PasswordInput";
 import { NavigationProps } from "../../../interfaces";
 import { FormContent, HeaderContent, SignUpContainer, SubTitle, Title } from "../styles";
 import { alertError } from "../../../common/alertError";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface RegisterUserProps extends FormData {
+    password: string;
+}
+interface SignUpRouteProps {
+    userData: {
+        name: string;
+        email: string;
+    }
+}
 
 export const SignUpSecondStep = ():ReactElement => {
 
     const navigation = useNavigation<NavigationProps>();
+    const route = useRoute();
+    const { userData } = route.params as SignUpRouteProps;
+    const [loadRequest, setLoadRequest] = useState(false);
+
     const schema = yup.object().shape({
         password: yup
         .string()
@@ -30,10 +45,26 @@ export const SignUpSecondStep = ():ReactElement => {
         resolver: yupResolver(schema)
     });
 
-    const handleNextStep = (formData: FormData) => {
-        navigation.navigate('SignUpSecondStep', {
-            userData: formData
-        })
+    const handleRegister = async (formData: RegisterUserProps) => {
+
+        setLoadRequest(true);
+        try {
+            const newUser = {
+                name: userData.name,
+                email: userData.email,
+                password: formData.password,
+            }
+    
+            await AsyncStorage.setItem(`@gofinances:user:${newUser.email}`, JSON.stringify(newUser))
+            navigation.navigate('Dashboard')
+        }
+        catch {
+            alertError('Erro ao criar sua conta, tente novamente! :)')
+        }
+        finally {
+            setLoadRequest(false);
+        }
+
     }
 
     return (
@@ -58,7 +89,8 @@ export const SignUpSecondStep = ():ReactElement => {
                         />
                         <Button 
                             title='Cadastrar'
-                            onPress={handleSubmit(handleNextStep, alertError)}
+                            onPress={handleSubmit(handleRegister, alertError)}
+                            loading
                         />
                     </FormContent>
                 </TouchableWithoutFeedback>
