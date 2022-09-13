@@ -25,7 +25,6 @@ export const SignUpFirstStep = ():ReactElement => {
     });
 
     const handleNextStep = (formData: FormData) => {
-        console.log(formData)
         navigation.navigate('SignUpSecondStep', {
             userData: formData
         })
@@ -37,7 +36,7 @@ export const SignUpFirstStep = ():ReactElement => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <HeaderContent>
                     <Title>Crie sua conta{'\n'}de forma{'\n'}simples e rápida</Title>
-                    <SubTitle>Adicione aqui seu Nome e E-mail</SubTitle>
+                    <SubTitle>Adicione aqui seu{'\n'}Nome de Usuário e E-mail</SubTitle>
                 </HeaderContent>
 
                 <FormContent>
@@ -45,11 +44,13 @@ export const SignUpFirstStep = ():ReactElement => {
                         iconName='user'
                         control={control}
                         name='name'
+                        placeholder="Nome de usuário"
                     />
                     <RegisterInput 
                         iconName="mail"
                         control={control}
                         name='email'
+                        placeholder="E-mail"
                         keyboardType='email-address'
                     />
                     <Button 

@@ -29,6 +29,7 @@ import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimat
 import { FloatingInfoButton } from "../../components/FloatingInfoButton";
 import { AlertAnimated } from "../../components/AlertAnimated";
 import { IconButton } from "../../components/Form/IconButton";
+import defaultAvatar from "../../assets/avatarDefault.png"
 
 interface AmountProps {
   income: string;
@@ -165,7 +166,7 @@ export const Dashboard = () => {
           >
             <HeaderWrapper>
               <UserInfo>
-                <Photo source={{uri: userInfo.photo }}/>
+                <Photo source={{uri: userInfo.photo || defaultAvatar }}/>
                 <Infos>
                   <Greeting>Olá, </Greeting>
                   <UserName>{userInfo.name}</UserName>

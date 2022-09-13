@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import { Keyboard, KeyboardAvoidingView } from "react-native";
+import { Alert, Keyboard, KeyboardAvoidingView } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
@@ -12,6 +12,7 @@ import { NavigationProps } from "../../../interfaces";
 import { FormContent, HeaderContent, SignUpContainer, SubTitle, Title } from "../styles";
 import { alertError } from "../../../common/alertError";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "../../../providers/AuthContext";
 
 interface RegisterUserProps extends FormData {
     password: string;
@@ -25,6 +26,7 @@ interface SignUpRouteProps {
 
 export const SignUpSecondStep = ():ReactElement => {
 
+    const { setUserInfo } = useAuth();
     const navigation = useNavigation<NavigationProps>();
     const route = useRoute();
     const { userData } = route.params as SignUpRouteProps;
@@ -48,15 +50,27 @@ export const SignUpSecondStep = ():ReactElement => {
     const handleRegister = async (formData: RegisterUserProps) => {
 
         setLoadRequest(true);
+
         try {
             const newUser = {
                 name: userData.name,
                 email: userData.email,
                 password: formData.password,
             }
+
+            // const user = await AsyncStorage.getItem(`@gofinances:user:${newUser.email}`);
+
+            // if (user) {
+            //     return Alert.alert('Ops!', 'E-mail já cadastrado, faça o login ou tente com outro e-mail')
+            // }
     
             await AsyncStorage.setItem(`@gofinances:user:${newUser.email}`, JSON.stringify(newUser))
-            navigation.navigate('Dashboard')
+
+            setUserInfo({
+                id: new Date().getMilliseconds().toString(),
+                name: newUser.name,
+                email: newUser.email,
+            })
         }
         catch {
             alertError('Erro ao criar sua conta, tente novamente! :)')
@@ -64,7 +78,6 @@ export const SignUpSecondStep = ():ReactElement => {
         finally {
             setLoadRequest(false);
         }
-
     }
 
     return (
@@ -90,7 +103,7 @@ export const SignUpSecondStep = ():ReactElement => {
                         <Button 
                             title='Cadastrar'
                             onPress={handleSubmit(handleRegister, alertError)}
-                            loading
+                            loading={loadRequest}
                         />
                     </FormContent>
                 </TouchableWithoutFeedback>
