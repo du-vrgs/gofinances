@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Keyboard, KeyboardAvoidingView } from "react-native";
+import { Alert, Keyboard, KeyboardAvoidingView } from "react-native";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +12,12 @@ import { FormContent, HeaderContent, SignUpContainer, SubTitle, Title } from "..
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProps } from "../../../interfaces";
 import { alertError } from "../../../common/alertError";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface FirstStepProps {
+    email: string;
+    name: string;
+}
 
 export const SignUpFirstStep = ():ReactElement => {
 
@@ -24,10 +30,36 @@ export const SignUpFirstStep = ():ReactElement => {
         resolver: yupResolver(schema)
     });
 
-    const handleNextStep = (formData: FormData) => {
-        navigation.navigate('SignUpSecondStep', {
-            userData: formData
-        })
+    const handleNextStep = async (formData: FormData) => {
+
+        try {
+            const { email } = formData as unknown as FirstStepProps;
+            const user = await AsyncStorage.getItem(`@gofinances:user:${email}`);
+
+            if (user) {
+                return Alert.alert(
+                    'Ops!', 
+                    'E-mail já cadastrado, faça o login ou tente com outro e-mail',
+                    [
+                        {
+                            text: 'Fazer Login',
+                            onPress: () => navigation.navigate('SignIn')
+                        },
+                        {
+                            text: 'Cadastrar outro email',
+                            onPress: () => null
+                        },
+                    ]
+                    )
+            }
+            navigation.navigate('SignUpSecondStep', {
+                userData: formData
+            })
+        }
+        catch {
+            alertError('Alguma coisa deu errado aqui, tente novamente')
+        }
+
     }
 
     return (

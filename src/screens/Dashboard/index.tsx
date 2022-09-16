@@ -166,7 +166,14 @@ export const Dashboard = () => {
           >
             <HeaderWrapper>
               <UserInfo>
-                <Photo source={{uri: userInfo.photo || defaultAvatar }}/>
+                <Photo 
+                // source={
+                //   {
+                //     uri: userInfo.photo
+                //   }
+                // }
+                source={defaultAvatar}
+                  />
                 <Infos>
                   <Greeting>Olá, </Greeting>
                   <UserName>{userInfo.name}</UserName>

@@ -28,9 +28,16 @@ import { Button } from "../../components/Form/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface SignInProps {
+    email: string;
+    password: string;
+}
 
 export const SignIn = (): ReactElement => {
 
+    const { storageUserKey, setUserInfo } = useAuth();
     const navigation = useNavigation<NavigationProps>();
     const theme = useTheme();
     const schema = yup.object().shape({
@@ -65,8 +72,47 @@ export const SignIn = (): ReactElement => {
             Alert.alert('Não foi possível conectar com a conta Apple');
         }
     };
-    const handleSignInWithEmail = (formData: FormData) => {
-        console.log(formData)
+    const handleSignInWithEmail = async (formData: FormData) => {
+        try {
+            const { email, password } = formData as unknown as SignInProps
+            const user = await AsyncStorage.getItem(`${storageUserKey}${email}`)
+            if (!user) {
+                return Alert.alert(
+                    'Ops!', 
+                    'E-mail não cadastrado', 
+                    [
+                        {
+                            text: 'Cadastrar', 
+                            onPress: () => handleNavigateToSignUp()
+                        },
+                        {
+                            text: 'Tentar novamente', 
+                            onPress: () => null
+                        }
+                    ])
+            }
+            const userData = JSON.parse(user)
+            if (password !== userData.password) {
+                return Alert.alert(
+                    'Ops!', 
+                    'Senha inválida', 
+                    [
+                        {
+                            text: 'Tentar novamente', 
+                            onPress: () => null
+                        }
+                    ])
+            }
+
+            setUserInfo({
+                id: userData.id,
+                name: userData.name,
+                email: userData.email,
+            })
+        }
+        catch {
+            AlertError('Deu algo errado por aqui, tente novamente :)')
+        }
     }
     const AlertError = (error) => {
         Alert.alert('Ops', String(Object.values(error)[0]['message']))

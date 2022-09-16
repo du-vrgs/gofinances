@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from "react";
 import { Alert, Keyboard, KeyboardAvoidingView } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import uuid from 'react-native-uuid';
 import * as yup from 'yup';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -26,7 +27,7 @@ interface SignUpRouteProps {
 
 export const SignUpSecondStep = ():ReactElement => {
 
-    const { setUserInfo } = useAuth();
+    const { setUserInfo, storageUserKey } = useAuth();
     const navigation = useNavigation<NavigationProps>();
     const route = useRoute();
     const { userData } = route.params as SignUpRouteProps;
@@ -53,21 +54,16 @@ export const SignUpSecondStep = ():ReactElement => {
 
         try {
             const newUser = {
+                id: String(uuid.v4()),
                 name: userData.name,
                 email: userData.email,
                 password: formData.password,
             }
-
-            // const user = await AsyncStorage.getItem(`@gofinances:user:${newUser.email}`);
-
-            // if (user) {
-            //     return Alert.alert('Ops!', 'E-mail já cadastrado, faça o login ou tente com outro e-mail')
-            // }
     
-            await AsyncStorage.setItem(`@gofinances:user:${newUser.email}`, JSON.stringify(newUser))
+            await AsyncStorage.setItem(`${storageUserKey}${newUser.email}`, JSON.stringify(newUser))
 
             setUserInfo({
-                id: new Date().getMilliseconds().toString(),
+                id: newUser.id,
                 name: newUser.name,
                 email: newUser.email,
             })

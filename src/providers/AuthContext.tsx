@@ -15,7 +15,7 @@ interface IAuthtenticationResponse {
     type: string;
 }
 
-interface UserInfo {
+export interface UserInfoProps {
     id: string;
     name: string;
     email: string;
@@ -23,13 +23,14 @@ interface UserInfo {
 }
 
 interface IAuthContextData {
-    setUserInfo: Dispatch<SetStateAction<UserInfo>>;
-    userInfo: UserInfo,
+    setUserInfo: Dispatch<SetStateAction<UserInfoProps>>;
+    userInfo: UserInfoProps,
     signInWithGoogle: () => Promise<void>;
     signInWithApple: () => Promise<void>;
     signOut(): Promise<void>;
     signOutLoading: boolean;
     storageTransactionsKey: string;
+    storageUserKey: string;
     isUserSignOn: boolean;
 };
 
@@ -40,9 +41,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const [loadingStorageUser, setLoadingStorageUser] = useState(true);
     const [signOutLoading, setSignOutLoading] = useState(false);
-    const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
+    const [userInfo, setUserInfo] = useState<UserInfoProps>({} as UserInfoProps);
     const isUserSignOn = !!userInfo.id;
-    const storageUserKey = "@gofinances:user"
+    const storageUserKey = "@gofinances:user:"
     const storageTransactionsKey = `@gofinances:transaction:${userInfo.id}`
 
     const signInWithGoogle = async () => {
@@ -113,7 +114,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const signOut = async () => {
         setSignOutLoading(true);
         await AsyncStorage.removeItem(storageUserKey).then(res => {
-            setUserInfo({} as UserInfo);
+            setUserInfo({} as UserInfoProps);
             setSignOutLoading(false);
         });
     }
@@ -122,7 +123,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const userStorageData = await AsyncStorage.getItem("@gofinances:user");
 
         if (userStorageData) {
-            const user = JSON.parse(userStorageData) as UserInfo;
+            const user = JSON.parse(userStorageData) as UserInfoProps;
 
             setUserInfo(user);
         }
@@ -138,6 +139,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         signOut,
         signOutLoading,
         storageTransactionsKey,
+        storageUserKey,
         isUserSignOn,
     };
 
