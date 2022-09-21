@@ -16,6 +16,7 @@ export const HeaderContent = styled(HeaderDefaultContainer)`
     align-items: center;
     justify-content: flex-end;
     height: ${RFValue(113)}px;
+    padding-bottom: 18px;
 `;
 
 export const Title = styled.Text`

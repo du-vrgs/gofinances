@@ -30,6 +30,7 @@ import { FloatingInfoButton } from "../../components/FloatingInfoButton";
 import { AlertAnimated } from "../../components/AlertAnimated";
 import { IconButton } from "../../components/Form/IconButton";
 import defaultAvatar from "../../assets/avatarDefault.png"
+import { DefaultAvatar } from "../../components/DefaultAvatar";
 
 interface AmountProps {
   income: string;
@@ -59,7 +60,7 @@ export const Dashboard = () => {
   }))
 
   const highLightsAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(scrollY.value, [0, 50], [1, 0], Extrapolate.CLAMP),
+    opacity: interpolate(scrollY.value, [0, 30], [1, 0], Extrapolate.CLAMP),
   }))
 
   const transanctionsTitleAnimatedStyle = useAnimatedStyle(() => ({
@@ -166,14 +167,17 @@ export const Dashboard = () => {
           >
             <HeaderWrapper>
               <UserInfo>
-                <Photo 
-                // source={
-                //   {
-                //     uri: userInfo.photo
-                //   }
-                // }
-                source={defaultAvatar}
+                {userInfo.photo ?
+                  <Photo 
+                  source={
+                    {
+                      uri: userInfo?.photo
+                    }
+                  }
                   />
+                :
+                <DefaultAvatar />
+                }
                 <Infos>
                   <Greeting>Olá, </Greeting>
                   <UserName>{userInfo.name}</UserName>

@@ -11,11 +11,10 @@ export const Header = styled.View`
     
     width: 100%;
     height: ${RFValue(113)}px;
-    padding-bottom: 19px;
+    padding-bottom: 18px;
 
     align-items: center;
     justify-content: flex-end;
-
 `
 export const Title = styled.Text`
 

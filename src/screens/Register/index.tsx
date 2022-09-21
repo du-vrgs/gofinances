@@ -41,12 +41,12 @@ interface NavigationProps {
 const schema = yup.object().shape({
     name: yup
     .string()
-    .required('Nome é obrigatório'),
+    .required('Digite um nome para essa transação'),
     amount: yup
     .number()
     .typeError('O valor deve ser numérico')
     .positive('Valor não pode ser negativo')
-    .required('Preço é obrigatório')
+    .required('Digite o valor da transação')
 })
 
 export const Register = ():ReactElement => {
@@ -112,7 +112,7 @@ export const Register = ():ReactElement => {
             const newTransactions = [...allTransactions, formData];
     
             await AsyncStorage.setItem(storageTransactionsKey, JSON.stringify(newTransactions)).then(() => {
-                Alert.alert('Save successfully');
+                Alert.alert('Boa!', 'Teu registro foi salvo');
                 resetFields();
                 navigation.navigate('Listagem');
             })
@@ -141,7 +141,7 @@ export const Register = ():ReactElement => {
             <Container>
                 <Header>
                     <Title>
-                        Cadastro
+                        Lançamentos
                     </Title>
                 </Header>
 
@@ -156,7 +156,7 @@ export const Register = ():ReactElement => {
                         <InputForm
                             control={control}
                             name='amount'
-                            placeholder='Preço'
+                            placeholder='Valor'
                             keyboardType="numeric"
                             error={errors.amount && errors.amount.message}
                         />
@@ -182,7 +182,7 @@ export const Register = ():ReactElement => {
                     <Button 
                         title='Enviar' 
                         onPress={handleSubmit(handleRegister)}
-                        // enabled={!isValidInputs}
+                        enabled
                     />
                 </Form>
 

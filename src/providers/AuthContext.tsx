@@ -76,7 +76,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
                 setUserInfo(user);
                 setSignOutLoading(false);
 
-                await AsyncStorage.setItem(storageUserKey, JSON.stringify(user));
+                await AsyncStorage.setItem(`${storageUserKey}${user.email}`, JSON.stringify(user));
             };
         }
         catch (error) {

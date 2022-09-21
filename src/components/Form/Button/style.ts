@@ -20,7 +20,7 @@ export const ButtonContainer = styled(RectButton)<Props>`
     border-radius: 4px;
     align-items: center;
 
-    ${({ enabled }) => enabled && css`
+    ${({ enabled }) => !enabled && css`
         background-color: ${({theme}) => theme.colors.secondary_light};
     `}
 `

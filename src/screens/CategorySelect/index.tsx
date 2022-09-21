@@ -33,28 +33,28 @@ export const CategorySelect = ({category, setCategory, closeSelectCategory}: Pro
             </HeaderContent>
 
             <FlatList
-            data={categories}
-            renderItem={({ item }) => (
-                <Category
-                    onPress={() => setCategory(item.name)}
-                    isActive={category.name === item.name}
-                >
-                    <Icon name={item.icon}/>
-                    <Name>
-                        {item.name}
-                    </Name>
-                </Category>
-            )}
-            keyExtractor={(item) => item.key}
-            ItemSeparatorComponent={() => <Separator />}
+                data={categories}
+                renderItem={({ item }) => (
+                    <Category
+                        onPress={() => setCategory(item.name)}
+                        isActive={category.name === item.name}
+                    >
+                        <Icon name={item.icon}/>
+                        <Name>
+                            {item.name}
+                        </Name>
+                    </Category>
+                )}
+                keyExtractor={(item) => item.key}
+                ItemSeparatorComponent={() => <Separator />}
             />
 
             <Footer>
                 <Button 
-                    title="Selecionar" 
+                    title={category.name === 'Categoria' ? 'Selecione uma categoria' : 'Selecionar'} 
                     activeOpacity={0.7} 
                     onPress={() => closeSelectCategory()}
-                    disabled={category.name === 'Categoria'}
+                    enabled={category.name !== 'Categoria'}
                 />
             </Footer>
         </Container>
