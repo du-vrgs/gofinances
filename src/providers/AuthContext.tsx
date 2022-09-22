@@ -1,8 +1,17 @@
-import React, { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
+import React, 
+{
+createContext, 
+Dispatch,
+ReactNode, 
+SetStateAction,
+useCallback, 
+useContext, 
+useEffect, 
+useState 
+} from "react";
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Loading } from "../components/Loading";
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -20,6 +29,7 @@ export interface UserInfoProps {
     name: string;
     email: string;
     photo?: string;
+    password?: string;
 }
 
 interface IAuthContextData {
@@ -28,9 +38,11 @@ interface IAuthContextData {
     signInWithGoogle: () => Promise<void>;
     signInWithApple: () => Promise<void>;
     signOut(): Promise<void>;
+    updateStorageUsers: (newUser: UserInfoProps) => Promise<void>;
+    setStorageLastUserLogged: (userLogged: UserInfoProps) => Promise<void>;
     signOutLoading: boolean;
     storageTransactionsKey: string;
-    storageUserKey: string;
+    storageUsersKey: string;
     isUserSignOn: boolean;
 };
 
@@ -43,7 +55,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const [signOutLoading, setSignOutLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<UserInfoProps>({} as UserInfoProps);
     const isUserSignOn = !!userInfo.id;
-    const storageUserKey = "@gofinances:user:"
+    const storageUsersKey = "@gofinances:users"
+    const storageUserLoggedKey = "@gofinances:user_logged"
     const storageTransactionsKey = `@gofinances:transaction:${userInfo.id}`
 
     const signInWithGoogle = async () => {
@@ -76,7 +89,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
                 setUserInfo(user);
                 setSignOutLoading(false);
 
-                await AsyncStorage.setItem(`${storageUserKey}${user.email}`, JSON.stringify(user));
+                await updateStorageUsers(user);
+                await setStorageLastUserLogged(user);
             };
         }
         catch (error) {
@@ -104,7 +118,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
                 };
 
                 setUserInfo(userInfos);
-                await AsyncStorage.setItem(storageUserKey, JSON.stringify(userInfos));
+                await updateStorageUsers(userInfos);
+                await setStorageLastUserLogged(userInfos);
             }
         }
         catch (error) {
@@ -113,19 +128,34 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
     const signOut = async () => {
         setSignOutLoading(true);
-        await AsyncStorage.removeItem(storageUserKey).then(res => {
-            setUserInfo({} as UserInfoProps);
-            setSignOutLoading(false);
-        });
-    }
 
-    const getStorageUserData = useCallback(async() => {
-        const userStorageData = await AsyncStorage.getItem("@gofinances:user");
+        await AsyncStorage.removeItem(storageUserLoggedKey).then(() => {
+            setTimeout(() => {
+                setUserInfo({} as UserInfoProps);
+                setSignOutLoading(false);
+            }, 1500)
+        })
+    };
 
-        if (userStorageData) {
-            const user = JSON.parse(userStorageData) as UserInfoProps;
+    const setStorageLastUserLogged = useCallback(async (userLogged: UserInfoProps) => {
+        await AsyncStorage.setItem(storageUserLoggedKey, JSON.stringify(userLogged));
+    }, []);
 
-            setUserInfo(user);
+    const updateStorageUsers = useCallback(async (newUser: UserInfoProps) => {
+        const storageUsers = await AsyncStorage.getItem(storageUsersKey);
+        const users: UserInfoProps[] = storageUsers ? JSON.parse(storageUsers) : [];
+        users.unshift(newUser);
+        
+        await AsyncStorage.setItem(storageUsersKey, JSON.stringify(users));
+    }, []);
+
+    const getStorageLastUserLoggedData = useCallback(async() => {
+        const userLoggedStorageData = await AsyncStorage.getItem(storageUserLoggedKey);
+        
+        if (userLoggedStorageData) {
+            const lastUserLogged = JSON.parse(userLoggedStorageData) as UserInfoProps;
+
+            setUserInfo(lastUserLogged);
         }
 
         setTimeout(() => setLoadingStorageUser(false), 2100);
@@ -137,13 +167,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         signInWithGoogle,
         signInWithApple,
         signOut,
+        updateStorageUsers,
+        setStorageLastUserLogged,
         signOutLoading,
         storageTransactionsKey,
-        storageUserKey,
+        storageUsersKey,
         isUserSignOn,
     };
 
-    useEffect(() => {getStorageUserData()}, [getStorageUserData])
+    useEffect(() => {getStorageLastUserLoggedData()}, [getStorageLastUserLoggedData]);
 
     return (
         <AuthContext.Provider value={exportedValues}>

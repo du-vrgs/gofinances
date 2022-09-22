@@ -3,7 +3,7 @@ import { Alert, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
 import { useForm } from "react-hook-form";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-import { useAuth } from "../../providers/AuthContext";
+import { useAuth, UserInfoProps } from "../../providers/AuthContext";
 import { 
     HeaderContent, 
     SignInContainer,
@@ -29,6 +29,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PasswordInput } from "../../components/Form/PasswordInput";
 
 interface SignInProps {
     email: string;
@@ -37,7 +38,7 @@ interface SignInProps {
 
 export const SignIn = (): ReactElement => {
 
-    const { storageUserKey, setUserInfo } = useAuth();
+    const { storageUsersKey, setUserInfo, setStorageLastUserLogged } = useAuth();
     const navigation = useNavigation<NavigationProps>();
     const theme = useTheme();
     const schema = yup.object().shape({
@@ -74,9 +75,13 @@ export const SignIn = (): ReactElement => {
     };
     const handleSignInWithEmail = async (formData: FormData) => {
         try {
-            const { email, password } = formData as unknown as SignInProps
-            const user = await AsyncStorage.getItem(`${storageUserKey}${email}`)
-            if (!user) {
+            const { email, password } = formData as unknown as SignInProps;
+
+            const storageUsers = await AsyncStorage.getItem(storageUsersKey);
+            const users: UserInfoProps[] = storageUsers ? JSON.parse(storageUsers) : [];
+            const thisUser = !!users.length && users.find(user => user.email === email);
+
+            if (!thisUser) {
                 return Alert.alert(
                     'Ops!', 
                     'E-mail não cadastrado', 
@@ -91,8 +96,8 @@ export const SignIn = (): ReactElement => {
                         }
                     ])
             }
-            const userData = JSON.parse(user)
-            if (password !== userData.password) {
+
+            if (password !== thisUser.password) {
                 return Alert.alert(
                     'Ops!', 
                     'Senha inválida', 
@@ -104,11 +109,8 @@ export const SignIn = (): ReactElement => {
                     ])
             }
 
-            setUserInfo({
-                id: userData.id,
-                name: userData.name,
-                email: userData.email,
-            })
+            setUserInfo(thisUser);
+            await setStorageLastUserLogged(thisUser);
         }
         catch {
             AlertError('Deu algo errado por aqui, tente novamente :)')
@@ -170,11 +172,9 @@ export const SignIn = (): ReactElement => {
                                 iconName='mail' 
                                 keyboardType='email-address'
                             />
-                            <RegisterInput
+                            <PasswordInput 
                                 control={control}
                                 name='password'
-                                iconName='lock' 
-                                keyboardType='visible-password'
                             />
                             <SingInButtonsWrapper>
                                 <Button 
@@ -182,12 +182,14 @@ export const SignIn = (): ReactElement => {
                                     onPress={() => handleNavigateToSignUp()}
                                     bgColor={`${theme.colors.primary}90`}
                                     size='fifty'
+                                    enabled
                                 />
                                 <Button 
                                     title="Entrar"
                                     onPress={handleSubmit(handleSignInWithEmail, AlertError)}
                                     bgColor={theme.colors.primary}
                                     size='fifty'
+                                    enabled
                                 />
                             </SingInButtonsWrapper>
                         </>

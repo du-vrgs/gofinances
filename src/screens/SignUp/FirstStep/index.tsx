@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationProps } from "../../../interfaces";
 import { alertError } from "../../../common/alertError";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth, UserInfoProps } from "../../../providers/AuthContext";
 
 interface FirstStepProps {
     email: string;
@@ -21,6 +22,7 @@ interface FirstStepProps {
 
 export const SignUpFirstStep = ():ReactElement => {
 
+    const { storageUsersKey } = useAuth();
     const navigation = useNavigation<NavigationProps>();
     const schema = yup.object().shape({
         name: yup.string().required('Nome é obrigatório'),
@@ -34,9 +36,11 @@ export const SignUpFirstStep = ():ReactElement => {
 
         try {
             const { email } = formData as unknown as FirstStepProps;
-            const user = await AsyncStorage.getItem(`@gofinances:user:${email}`);
+            const storageUsers = await AsyncStorage.getItem(storageUsersKey);
+            const users: UserInfoProps[] = storageUsers ? JSON.parse(storageUsers) : [];
+            const thisUser = !!users.length && users.find(user => user.email === email)
 
-            if (user) {
+            if (thisUser) {
                 return Alert.alert(
                     'Ops!', 
                     'E-mail já cadastrado, faça o login ou tente com outro e-mail',

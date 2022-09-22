@@ -1,18 +1,16 @@
 import React, { ReactElement, useState } from "react";
-import { Alert, Keyboard, KeyboardAvoidingView } from "react-native";
+import { Keyboard, KeyboardAvoidingView } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import uuid from 'react-native-uuid';
 import * as yup from 'yup';
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import { Button } from "../../../components/Form/Button";
 import { PasswordInput } from "../../../components/Form/PasswordInput";
-import { NavigationProps } from "../../../interfaces";
 import { FormContent, HeaderContent, SignUpContainer, SubTitle, Title } from "../styles";
 import { alertError } from "../../../common/alertError";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../../../providers/AuthContext";
 
 interface RegisterUserProps extends FormData {
@@ -27,8 +25,7 @@ interface SignUpRouteProps {
 
 export const SignUpSecondStep = ():ReactElement => {
 
-    const { setUserInfo, storageUserKey } = useAuth();
-    const navigation = useNavigation<NavigationProps>();
+    const { setUserInfo, updateStorageUsers, setStorageLastUserLogged } = useAuth();
     const route = useRoute();
     const { userData } = route.params as SignUpRouteProps;
     const [loadRequest, setLoadRequest] = useState(false);
@@ -58,23 +55,21 @@ export const SignUpSecondStep = ():ReactElement => {
                 name: userData.name,
                 email: userData.email,
                 password: formData.password,
-            }
-    
-            await AsyncStorage.setItem(`${storageUserKey}${newUser.email}`, JSON.stringify(newUser))
+            };
+            const userInfo = {...newUser};
+            delete userInfo.password
 
-            setUserInfo({
-                id: newUser.id,
-                name: newUser.name,
-                email: newUser.email,
-            })
+            setUserInfo(userInfo);
+            await updateStorageUsers(newUser);
+            await setStorageLastUserLogged(userInfo);
         }
         catch {
-            alertError('Erro ao criar sua conta, tente novamente! :)')
+            alertError('Erro ao criar sua conta, tente novamente! :)');
         }
         finally {
             setLoadRequest(false);
         }
-    }
+    };
 
     return (
         <SignUpContainer>

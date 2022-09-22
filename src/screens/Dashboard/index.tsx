@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, BackHandler } from "react-native";
+import React, { useCallback, useRef, useState } from "react";
+import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../../providers/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,10 +16,8 @@ import {
   Photo,
   Greeting,
   UserName,
-  Icon,
   HeaderWrapper,
   ScrollHorizontalHightLightCards,
-  ScrollVerticalTransactionsCards,
   Title,
   AnimatedScrollVerticalTransactionsCards,
   AlertContent
@@ -29,7 +27,6 @@ import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimat
 import { FloatingInfoButton } from "../../components/FloatingInfoButton";
 import { AlertAnimated } from "../../components/AlertAnimated";
 import { IconButton } from "../../components/Form/IconButton";
-import defaultAvatar from "../../assets/avatarDefault.png"
 import { DefaultAvatar } from "../../components/DefaultAvatar";
 
 interface AmountProps {
@@ -54,15 +51,12 @@ export const Dashboard = () => {
   const scrollHandler = useAnimatedScrollHandler(event => {
     scrollY.value = event.contentOffset.y;
   })
-
   const headerAnimatedStyle = useAnimatedStyle(() => ({
     height: interpolate(scrollY.value, [0, 250], [250, 120], Extrapolate.CLAMP)
   }))
-
   const highLightsAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(scrollY.value, [0, 30], [1, 0], Extrapolate.CLAMP),
   }))
-
   const transanctionsTitleAnimatedStyle = useAnimatedStyle(() => ({
     height: interpolate(
       scrollY.value, 
@@ -71,7 +65,6 @@ export const Dashboard = () => {
   }))
 
   const { userInfo, signOut, signOutLoading, storageTransactionsKey } = useAuth();
-
   const [loading, setLoading] = useState(true);
   const [transactionsList, setTransactionsList] = useState<DataListProps[]>([])
   const [transactionsAmount, setTransactionsAmount] = useState<AmountProps>({
@@ -96,7 +89,6 @@ export const Dashboard = () => {
   };
 
   const getTransactions = async () => {
-      // const transactionKey = `@gofinances:transaction:${userInfo.id}`;
       const storageTransactions = await AsyncStorage.getItem(storageTransactionsKey);
       const allTransactions = storageTransactions ? JSON.parse(storageTransactions) : [];
 
