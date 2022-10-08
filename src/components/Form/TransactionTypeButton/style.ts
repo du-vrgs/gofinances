@@ -1,11 +1,13 @@
+import { BorderlessButtonProps } from 'react-native-gesture-handler';
+import { BorderlessButton } from 'react-native-gesture-handler';
 import { PropsWithChildren } from 'react';
-import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
+// import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled, { css } from "styled-components/native";
 
 
-interface Props extends PropsWithChildren<RectButtonProps> {
+interface Props extends PropsWithChildren<BorderlessButtonProps> {
     isActive?: boolean;
     type?: 'up' | 'down'
 }
@@ -20,7 +22,7 @@ export const Container = styled.View<Props>`
     `}
 `
 
-export const TransactionTypeButtonContainer = styled(RectButton)<Props>`
+export const TransactionTypeButtonContainer = styled(BorderlessButton)<Props>`
     width: 100%;
     flex-direction: row;
     align-items: center;

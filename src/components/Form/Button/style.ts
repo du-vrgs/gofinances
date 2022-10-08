@@ -1,15 +1,15 @@
 import { Feather } from '@expo/vector-icons';
 import { PropsWithChildren } from "react";
-import { RectButton, RectButtonProps } from "react-native-gesture-handler";
+import { BorderlessButton, BorderlessButtonProps, RectButton, RectButtonProps } from "react-native-gesture-handler";
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled, { css } from "styled-components/native";
 
-interface Props extends PropsWithChildren<RectButtonProps> {
+interface Props extends PropsWithChildren<BorderlessButtonProps> {
     bgColor?: string;
     hasLoad?: boolean;
 }
 
-export const ButtonContainer = styled(RectButton)<Props>`
+export const ButtonContainer = styled(BorderlessButton)<Props>`
     flex-direction: row;
     justify-content: center;
     align-items: center;

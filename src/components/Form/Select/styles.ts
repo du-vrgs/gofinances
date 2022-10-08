@@ -1,9 +1,9 @@
-import { RectButton } from 'react-native-gesture-handler';
+import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
 import styled from "styled-components/native";
 
-export const SelectContainer = styled(RectButton)`
+export const SelectContainer = styled(BorderlessButton)`
     background-color: ${({theme}) => theme.colors.shape};
     width: 100%;
     border-radius: 4px;
