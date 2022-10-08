@@ -1,16 +1,23 @@
 {
   "expo": {
-    "name": "gofinances",
-    "slug": "gofinances",
-    "scheme": "gofinances",
+    "name": "gofinancesedd",
+    "slug": "gofinancesedd",
+    "scheme": "gofinancesedd",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
+    "icon": "./src/assets/icon.png",
     "splash": {
       "image": "./src/assets/splash.png",
       "backgroundColor": "#5636D3"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "44423e21-2142-4ac2-8de3-abbfaadc4848"
+      }
+    },
+    "description": ""
   },
-  "name": "gofinances"
+  "name": "gofinancesedd"
 }
