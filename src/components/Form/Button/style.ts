@@ -21,7 +21,7 @@ export const ButtonContainer = styled(BorderlessButton)<Props>`
     align-items: center;
 
     ${({ enabled }) => !enabled && css`
-        background-color: ${({theme}) => theme.colors.secondary_light};
+        background-color: ${({theme, bgColor }) => bgColor || theme.colors.secondary_light};
     `}
 `
 

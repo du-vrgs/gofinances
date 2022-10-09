@@ -28,6 +28,7 @@ import { FloatingInfoButton } from "../../components/FloatingInfoButton";
 import { AlertAnimated } from "../../components/AlertAnimated";
 import { IconButton } from "../../components/Form/IconButton";
 import { DefaultAvatar } from "../../components/DefaultAvatar";
+import { ModalSelectTransactionsRange } from "../../components/ModalSelectTransactionsRange";
 
 interface AmountProps {
   income: string;
@@ -46,6 +47,8 @@ export interface DataListProps extends TransactionCardProps {
 
 export const Dashboard = () => {
 
+  const [openModal, setOpenModal] = useState(false);
+  const [monthSelected, setMonthSelected] = useState(new Date().toLocaleDateString('pt-BR', { month: 'long' }))
   const headerRef = useRef(null);
   const scrollY = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler(event => {
@@ -237,7 +240,19 @@ export const Dashboard = () => {
           }
         
         </>}
-        <FloatingInfoButton />
+        <FloatingInfoButton 
+          onPress={() => setOpenModal(true)}
+        />
+
+        <ModalSelectTransactionsRange 
+          isVisible={openModal}
+          monthSelected={monthSelected}
+          onSelect={
+            (value) => {
+              setOpenModal(false)
+              setMonthSelected(value)
+            }}
+        />
       </Container>
   )
 } 

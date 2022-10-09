@@ -125,7 +125,7 @@ export const Resume = (): ReactElement => {
                 </Title>
             </Header>
 
-            {loading 
+            {loading
             ? 
                 <LoadAnimated /> 
             :
@@ -152,14 +152,14 @@ export const Resume = (): ReactElement => {
                             x={`totalPercent`}
                             y={'total'}
                             colorScale={resumes.map((resume) => resume.color)}
-                            labelRadius={112.5}
+                            labelRadius={99}
                             padAngle={({ datum }) => datum.y}
-                            innerRadius={100}
+                            innerRadius={80}
                             style={
                                 { 
                                     labels: { 
                                         fill: theme.colors.shape, 
-                                        fontSize: `${RFValue(18)}px`, 
+                                        fontSize: `${RFValue(16)}px`, 
                                         fontWeight: "bold" 
                                     }
                                 }
@@ -169,9 +169,9 @@ export const Resume = (): ReactElement => {
                     </ChartContent>
 
                     <HistoryCardsContent
-                        contentContainerStyle={{
-                            paddingBottom: tabBottomHeight
-                        }}
+                        // contentContainerStyle={{
+                        //     paddingBottom: tabBottomHeight
+                        // }}
                     >
                         {resumes.map((resume, index) => (
                             <HistoryCard

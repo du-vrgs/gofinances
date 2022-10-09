@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "eddvrgs",
     "name": "gofinancesedd",
     "slug": "gofinancesedd",
     "scheme": "gofinancesedd",
@@ -12,12 +13,15 @@
       "image": "./src/assets/splash.png",
       "backgroundColor": "#5636D3"
     },
+    "description": "",
+    "android": {
+      "versionCode": 1
+    },
     "extra": {
       "eas": {
-        "projectId": "44423e21-2142-4ac2-8de3-abbfaadc4848"
+        "projectId": "4aefb785-985d-440b-acae-e38036b853da"
       }
-    },
-    "description": ""
+    }
   },
   "name": "gofinancesedd"
 }

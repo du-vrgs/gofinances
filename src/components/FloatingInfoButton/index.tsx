@@ -3,7 +3,11 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { AnimatedFloating, FloatingButtonContainer, InfoIcon } from "./styles";
 
-export const FloatingInfoButton = ():ReactElement => {
+interface Props {
+    onPress: () => void;
+}
+
+export const FloatingInfoButton = ({onPress}: Props):ReactElement => {
 
     const positionX = useSharedValue(0);
     const positionY = useSharedValue(0);
@@ -37,7 +41,9 @@ export const FloatingInfoButton = ():ReactElement => {
             <AnimatedFloating 
                 style={floatingAnimatedStyle}
             >
-                <FloatingButtonContainer>
+                <FloatingButtonContainer
+                    onPress={onPress}
+                >
                     <InfoIcon 
                         name='info'
                     />

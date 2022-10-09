@@ -16,6 +16,10 @@ export const HistoryCardContainer = styled.View<CardProps>`
     border-radius: 6px;
     border-left-width: 5px;
     border-left-color: ${({ color }) => color};
+
+    margin-left: 12px;
+    height: 50px;
+    width: 260px;
 `;
 
 export const Title = styled.Text`

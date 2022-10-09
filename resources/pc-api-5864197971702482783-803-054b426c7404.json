@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-5864197971702482783-803",
+  "private_key_id": "054b426c74045090245d5a7a7d38f90a2e3e2a59",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCOsT46A41PvnuS\nG9WDlxaVyrRsfh0w1JC49dYW8GOI8Ur10u4Znu5V8IS73QPNf7LYOzToWVXLh1A1\nX9IOTIIQhT6j+9A8rnJnnMF4wuMsvebvm7PA0l5ctAAYmPsAHIKFnBQm2wJYmvZn\nWnUJn6yvzVgXWfabhC2mFhB9MHFzZogt2885M+6AgwmnacFZFQIRPRD2Z8tUOZjg\n5gM5baOyv7BWPa9pdzM5iO+x2T0gx+QSvXOt2i8OIMReQDFh6iZO49w6auVwX57d\nXljqp8+LdoSzfUldB1nb0yFJourGGii0B8+SMoqe7pid7ewFVjv7JKXdtDh9m1XM\nR28jGhYVAgMBAAECggEAHxAwxrpdOf3ysrUCfzoV/Zf6PSAbRLURqGJEMAw27unw\ncqFvmf5CTk0k6CzOFh91lKMW+nnwNnWHnYb1mI1JR0VqhJJeG8eyOiIi8CIlCGly\n67iOoixpxG6fErvC8JxEQcffjzHgSd+6QnerwOOU2VSvl63LBMH6mgx1nHs+R2u4\nfudAOEXuIaDxlhOZzPkrZ47fGo0EG/9/F2a6bcukNnmneCOS4bf1FUY5CENMXWZS\nu53ow9OifDkVizaUz5vcdL2NWvmTiZLrhhRSeJ4eWqMerZdPK0oLVHJV79KYcS3B\n1JBMwa2cic9YBHa00EEAaiQ04LWn9BxsBl30ou51wQKBgQDDjlUhqcXDZslpURD4\n0LREQ/YmSrjJe1c+V26/FHl9kR3dZj/90vD7SKABDkRn6hjzv6LKemE3BiZb2wcr\nSP9S4tbNg4UsX2aBrhWhOQA/EmhLW4WvozNJcSeW6hgqT7qt5bxErufa7VuZl0/n\nZcrFc8RJxPTvBvwqCFwPZz/bUQKBgQC6y/6gywSeDfPrwORZoa3EH3QM+JZb4zDa\n2lKTI+TOnmnlIsnM+4NjErXAdi2qFTTUsVT4cb9NQ+9lJt2C8eDLVjIXVfe/N93N\nXztbkrWYv8xdnNWn2slpmuPpgcAuzRKJrN0vKTqa47p5mfTS4nEFLVe6hFOvkOuS\nbIRXoBeVhQKBgAJIXgwHjExsnbtB+/27ie8mD/CAfMm1S95pbNyEI6roj72u3N5c\noP196og4n2nLHMFzojXU2d+njbkSxHGn53sTNMivWVWcQ3kODCiWnr8duuPuTJAx\nSn73+CtVzjRoO9idzuXKWOCAVspjLsaXtJc7c7Ycu3My1Ky07kYrwV4RAoGAW8IT\nXWb86KsP8/H3+fOKyTluJ2UBbzfF6uut/mt2XOzCNfWFzbSLEOLC9zzWJ6NtJUHK\n7JPrlgfWFAkobMdmVlwMFRx8q6jEwrqSDOSfYd5thFqjNWYq5D5a0HyVLCg+f/Sz\nXhRRnn5ZPpya//CN9i4U1yFjfm2g2neF9wlELIUCgYAYwkmoRVeqYYtfqUZSp48Y\nmxVlGN37hrP5y5qawe5SvQL0o9zVMQMYgxz0Uo+MicP1VKYA28dr+II/rfD62TNR\n21GvP5mEUvifR92WWHUC1cFTojExI4do+gu6d02xaLqvTk7BDcQGtIg177kQw9Yz\nFwKsbt/zoivOTslV8HlsBA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "expo-gofinancesedd-app@pc-api-5864197971702482783-803.iam.gserviceaccount.com",
+  "client_id": "104276077189568894307",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/expo-gofinancesedd-app%40pc-api-5864197971702482783-803.iam.gserviceaccount.com"
+}

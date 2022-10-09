@@ -30,18 +30,16 @@ export const Title = styled.Text`
     font-size: ${RFValue(18)}px;
 `
 
-
 export const ChartContent = styled.View`
     width: 100%;
     align-items: center;
     padding: 0px 24px;
 `;
 export const HistoryCardsContent = styled(ScrollView).attrs({
-    vertical: true,
-    showsVerticalScrollIndicator: false,
+    horizontal: true,
+    showsHorizontalScrollIndicator: false,
+    contentContainerStyle: { paddingHorizontal: 24 }
 })<ScrollViewProps>`
-    padding: 0px 24px;
-    flex: .90; 
 `;
 
 
