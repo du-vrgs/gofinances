@@ -58,3 +58,5 @@ dist/
 .env
 
 ./node_modules
+
+./resourses
